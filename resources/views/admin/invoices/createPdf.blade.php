@@ -37,7 +37,7 @@
             flex-wrap: wrap;
         }
         .col-6{
-            width: 50%;
+            width: 55%;
             flex: 0 0 auto;
         }
         .text-white{
@@ -103,49 +103,48 @@
                 </div>
                 <div class="col-6">
                     <div class="company-details">
-                        <p class="text-white">assdad asd  asda asdad a sd</p>
-                        <p class="text-white">assdad asd asd</p>
-                        <p class="text-white">+91 888555XXXX</p>
+                        <p class="text-white">Mirpur DOHS</p>
+                        <p class="text-white">11 Avenue</p>
+                        <p class="text-white">+91 88855509876</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="body-section">
-            <div class="row">
-                <div class="col-6">
+            <div >
+                <div>
                     <h2 class="heading">Invoice No.: 00{{$invoice->id}}</h2>
-                    <p class="sub-heading">Tracking No. fabcart2025 </p>
+                    <p class="sub-heading">Tracking No. 00{{$invoice->id}} </p>
                     <p class="sub-heading">Order Date: {{$invoice->created_at}} </p>
-                    <p class="sub-heading">Email Address: {{$invoice->userSessions}} </p>
+                    <p class="sub-heading">Email Address: {{$users->find($usersession->taggedUsersMachines()->first()->user_id)->email}} </p>
                 </div>
-                <div class="col-6">
-                    <p class="sub-heading">Full Name:  </p>
-                    <p class="sub-heading">Address:  </p>
-                    <p class="sub-heading">Phone Number:  </p>
-                    <p class="sub-heading">City,State,Pincode:  </p>
+                <div >
+                    <p class="sub-heading">Full Name: {{$users->find($usersession->taggedUsersMachines()->first()->user_id)->first_name}} {{$users->find($usersession->taggedUsersMachines()->first()->user_id)->last_name}} </p>
+                    <p class="sub-heading">Address: {{$users->find($usersession->taggedUsersMachines()->first()->user_id)->company_name}} </p>
+                    <p class="sub-heading">Phone Number: {{$users->find($usersession->taggedUsersMachines()->first()->user_id)->phone_number}} </p>
                 </div>
             </div>
         </div>
 
         <div class="body-section">
-            <h3 class="heading">Ordered Items</h3>
+            <h3 class="heading">Tagged Machine</h3>
             <br>
             <table class="table-bordered">
                 <thead>
                     <tr>
-                        <th>Product</th>
-                        <th class="w-20">Price</th>
-                        <th class="w-20">Quantity</th>
+                        <th>Machine No.</th>
+                        <th class="w-20">Session Rate</th>
+                        <th class="w-20">Discount</th>
                         <th class="w-20">Grandtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Product Name</td>
-                        <td>10</td>
-                        <td>1</td>
-                        <td>10</td>
+                        <td>{{$machine->find($usersession->taggedUsersMachines()->first()->machine_id)->machine_no}}</td>
+                        <td>{{$tag->find($usersession->taggedUsersMachines()->first()->id)->hourly_session_charge}}</td>
+                        <td>{{$invoice->discount}}%</td>
+                        <td>{{$invoice->final_amount}}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="text-right">Sub Total</td>
@@ -157,17 +156,16 @@
                     </tr>
                     <tr>
                         <td colspan="3" class="text-right">Grand Total</td>
-                        <td> 12.XX</td>
+                        <td> {{$invoice->total_payable_amount}}</td>
                     </tr>
                 </tbody>
             </table>
             <br>
             <h3 class="heading">Payment Status: Paid</h3>
-            <h3 class="heading">Payment Mode: Cash on Delivery</h3>
         </div>
 
         <div class="body-section">
-            <p>&copy; Copyright 2021 - Fabcart. All rights reserved. 
+            <p>&copy; Copyright 2021 - Machine Handling System.All rights reserved. 
                 <a href="https://www.fundaofwebit.com/" class="float-right">www.fundaofwebit.com</a>
             </p>
         </div>      
