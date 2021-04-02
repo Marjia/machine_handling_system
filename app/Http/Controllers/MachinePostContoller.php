@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Machines;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMachinePost;
-
+use App\Models\TaggedUsersMachines;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MachinePostContoller extends Controller
 {
@@ -44,6 +47,7 @@ class MachinePostContoller extends Controller
         $AddMachine = new Machines();
         $AddMachine-> machine_no = $request->input('machine_no');
         $AddMachine-> is_active = $request->input('is_active');
+        $AddMachine->created_by = Auth::user()->id;
         $AddMachine->save();
 
         return redirect('/machine');
@@ -57,7 +61,13 @@ class MachinePostContoller extends Controller
      */
     public function show($id)
     {
-        return view('admin.machine.show',['machine'=> Machines::findOrFail($id)]);
+        $tag = TaggedUsersMachines::where('machine_id',$id)->get();
+        //$user_id = $tag->user_id;
+        //dd($tag);
+        $machine=Machines::findOrFail($id);
+        $user= User::findOrFail($machine->created_by); 
+       // 
+        return view('admin.machine.show',['machine'=> $machine,'users'=>$user,'tag'=>$tag]);
     }
 
     /**
@@ -94,6 +104,8 @@ class MachinePostContoller extends Controller
          
         $machinePost->machine_no = $request->input('machine_no');
         $machinePost-> is_active = $request->input('is_active');
+        $machinePost->modified_by = Auth::user()->id;
+        $machinePost->updated_at = Carbon::now();
         $machinePost->save();
 
         return redirect(route('machine.show',$machinePost->id));

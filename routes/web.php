@@ -10,6 +10,7 @@ use App\Http\Controllers\MachineDeactivationController;
 use App\Http\Controllers\MachinePostContoller;
 use App\Http\Controllers\UserDeactivationController;
 use App\Http\Controllers\UserPostsController;
+use App\Http\Controllers\UserSessionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -35,3 +36,5 @@ Route::get('user/{id}/delete',[UserDeactivationController::class, 'edit'])->name
 
 Route::resource('invoice',IsInvoiceController::class)->only(['index','edit','update','show']);
 Route::get('generate-invoice/{id}',[GenerateInvoicePdfController::class,'invoices'])->name('generate-invoices');
+
+Route::resource('user-session',UserSessionController::class)->only(['index']);

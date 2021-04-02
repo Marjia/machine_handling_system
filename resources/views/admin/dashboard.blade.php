@@ -51,6 +51,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col s4">
+                <div class="card-panel teal">
+                    <div class="card-action">
+                        <a class="white-text" href="{{route('user-session.index')}}">Session Create</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
