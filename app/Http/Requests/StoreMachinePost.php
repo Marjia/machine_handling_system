@@ -25,7 +25,7 @@ class StoreMachinePost extends FormRequest
     {
         return [
             'machine_no' => 'required|unique:machines',
-            'is_active'=>'required',
+            // 'is_active'=>'required',
         ];
     }
 }

@@ -8,9 +8,10 @@
                     <li><a href="{{route('login')}}">Log In</a></li>
                 @endguest
                 @auth
-                    <li><a href="{{ route('adminDashboard') }}">{{ auth()->user()->name }}</a></li>
+                    <li><a href="{{ route('profile') }}">{{ auth()->user()->name }}</a></li>
+                    <li><a href="{{ route('adminDashboard') }}">Dashboard</a></li>
                 @endauth
             </ul>
         </div>
     </div>
-</nav> 
+</nav>

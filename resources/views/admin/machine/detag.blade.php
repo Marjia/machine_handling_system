@@ -24,29 +24,29 @@
                       {
                           echo"
                           <td>
-                                 $user->name 
-                          </td>  
+                                 $user->name
+                          </td>
                           ";
                       }
                   @endphp
-                    
+
                 @endforeach
-              
+
                 @foreach ($machines as $machine)
                   @php
                       if($tag->machine_id == $machine->id)
                       {
                           echo"
                           <td>
-                                 $machine->machine_no 
-                          </td>  
+                                 $machine->machine_no
+                          </td>
                           ";
                       }
                   @endphp
-                    
+
                 @endforeach
                 <td>{{ $tag->is_active }}</td>
-                <td><a class="btn" href="{{ route('delete-detag', $tag->id) }}">Deactivate</a></td>
+                <td><a class="btn" href="{{ route('delete-detag', $tag->id) }}">Detag</a></td>
 
                 {{-- <form method="POST" action="{{route('deactivate-detag', $tag->id)}}">
                     @csrf
@@ -63,5 +63,5 @@
             </tbody>
           </table>
     </div>
-</div>    
+</div>
 @endsection

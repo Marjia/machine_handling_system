@@ -53,7 +53,7 @@ class UserPostsController extends Controller
         $addUser->address=$request->input('address');
         $addUser->tax_reg_no=$request->input('tax_reg_no');
         $addUser->is_admin=$request->input('is_admin');
-        $addUser->is_active=$request->input('is_active');
+        $addUser->is_active="YES";
         $addUser->password= Hash::make($request['password']);
 
         $addUser->save();
@@ -96,7 +96,7 @@ class UserPostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $userPost = User::findOrFail($id);
 
         $request->validate([

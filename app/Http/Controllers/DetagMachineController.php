@@ -29,19 +29,19 @@ class DetagMachineController extends Controller
         $input->is_active="NO";
         $input->detagged_by= Auth::user()->id;
         $input->detagged_at=Carbon::now();
-        
+
         $input->save();
 
-        $userSession = new UserSessions();
-
-        $userSession->user_id=$input->user_id;
-        $userSession->tagged_users_machines_id=$input->id;
-        $userSession->start_time=$input->tagged_at;
-        $userSession->end_time=$input->detagged_at;
-        $userSession->session_rate = $input->hourly_session_charge;
-        $userSession->logged_at=Carbon::now();
-
-        $userSession->save();
+        // $userSession = new UserSessions();
+        //
+        // $userSession->user_id=$input->user_id;
+        // $userSession->tagged_users_machines_id=$input->id;
+        // $userSession->start_time=$input->tagged_at;
+        // $userSession->end_time=$input->detagged_at;
+        // $userSession->session_rate = $input->hourly_session_charge;
+        // $userSession->logged_at=Carbon::now();
+        //
+        // $userSession->save();
 
         $machine=$input->machine_id;
 
@@ -52,10 +52,10 @@ class DetagMachineController extends Controller
 
         $machines->is_tagged="NO";
 
- 
+
        // dd($machines);
         $machines->save();
- 
+
 
 
         return redirect('/tagged-machine');

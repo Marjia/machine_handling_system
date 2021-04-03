@@ -23,6 +23,9 @@ class UserSeeder extends Seeder
             'email' => 'coco@gmail.com',
             'is_active'=>'YES',
             'is_admin'=>'YES',
+            'address'=>'New Road ,New House',
+            'tax_reg_no'=>'987',
+            'phone_number'=>'098',
             'password' => Hash::make('1234'),
         ]);
 
@@ -34,6 +37,9 @@ class UserSeeder extends Seeder
             'email' => 'marco@gmail.com',
             'is_active'=>'YES',
             'is_admin'=>'NO',
+            'address'=>'New Road ,New House',
+            'tax_reg_no'=>'987',
+            'phone_number'=>'098',
             'password' => Hash::make('1234'),
         ]);
 
@@ -45,6 +51,9 @@ class UserSeeder extends Seeder
             'email' => 'rafe@gmail.com',
             'is_active'=>'YES',
             'is_admin'=>'YES',
+            'address'=>'New Road ,New House',
+            'tax_reg_no'=>'987',
+            'phone_number'=>'098',
             'password' => Hash::make('1234'),
         ]);
 
@@ -56,9 +65,12 @@ class UserSeeder extends Seeder
             'email' => 'clair@gmail.com',
             'is_active'=>'YES',
             'is_admin'=>'YES',
+            'address'=>'New Road ,New House',
+            'tax_reg_no'=>'987',
+            'phone_number'=>'098',
             'password' => Hash::make('1234'),
         ]);
-        
+
         USER::create([
             'first_name'=>'coco',
             'last_name'=>'spencer',
@@ -67,6 +79,9 @@ class UserSeeder extends Seeder
             'email' => 'ruby@gmail.com',
             'is_active'=>'YES',
             'is_admin'=>'NO',
+            'address'=>'New Road ,New House',
+            'tax_reg_no'=>'987',
+            'phone_number'=>'098',
             'password' => Hash::make('1234'),
         ]);
     }

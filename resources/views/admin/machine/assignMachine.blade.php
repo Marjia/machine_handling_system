@@ -21,15 +21,15 @@
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
-            
+
                 <div class="input-field col s6">
                     <select name="machine_no" id="machine_id">
                       <option value="" disabled selected>Select</option>
 
                       @foreach ($machines as $machine)
-                        <option value="{{ $machine->id }}">{{ $machine->machine_no }}</option> 
+                        <option value="{{ $machine->id }}">{{ $machine->machine_no }}</option>
                       @endforeach
-                      
+
                     </select>
                     <label>Machine No.</label>
                     @error('machine_no')
@@ -55,7 +55,7 @@
                     @enderror
                 </div>
             </div> --}}
-            <div class="input-field col s12">
+            <!-- <div class="input-field col s12">
                 <select name="is_active">
                   <option value="" disabled selected>Select</option>
                   <option value="NO"  >NO</option>
@@ -65,7 +65,7 @@
                 @error('is_active')
                     <p>{{ $message }}</p>
                 @enderror
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col s12">
                     <button type="submit" class="btn">Tag machine</button>
@@ -83,9 +83,3 @@
         });
     </script>
 @endsection
-
-
-
-
-
- 

@@ -20,7 +20,7 @@ class MachinePostContoller extends Controller
     public function index()
     {
         $machine= Machines::where('is_delete','NO')->get();
-        
+
         return view('admin.machine.index',['machines'=>$machine]);
     }
 
@@ -42,11 +42,11 @@ class MachinePostContoller extends Controller
      */
     public function store(StoreMachinePost $request)
     {
-       $request->validated();     
+       $request->validated();
         //Machines::create($validatedData);
         $AddMachine = new Machines();
         $AddMachine-> machine_no = $request->input('machine_no');
-        $AddMachine-> is_active = $request->input('is_active');
+        $AddMachine-> is_active = "YES";
         $AddMachine->created_by = Auth::user()->id;
         $AddMachine->save();
 
@@ -65,8 +65,8 @@ class MachinePostContoller extends Controller
         //$user_id = $tag->user_id;
         //dd($tag);
         $machine=Machines::findOrFail($id);
-        $user= User::findOrFail($machine->created_by); 
-       // 
+        $user= User::findOrFail($machine->created_by);
+       //
         return view('admin.machine.show',['machine'=> $machine,'users'=>$user,'tag'=>$tag]);
     }
 
@@ -82,7 +82,7 @@ class MachinePostContoller extends Controller
 
         return view('admin.machine.edit',['machine'=>$machine]);
 
-        
+
     }
 
     /**
@@ -99,9 +99,9 @@ class MachinePostContoller extends Controller
         $request->validate([
             'is_active'=>'required',
             'machine_no' => 'required|unique:machines,machine_no,'.$machinePost->id
-            
+
         ]);
-         
+
         $machinePost->machine_no = $request->input('machine_no');
         $machinePost-> is_active = $request->input('is_active');
         $machinePost->modified_by = Auth::user()->id;

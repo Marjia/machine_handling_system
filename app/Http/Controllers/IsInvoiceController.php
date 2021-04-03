@@ -82,24 +82,27 @@ class IsInvoiceController extends Controller
     public function update(Request $request, $id)
     {
         $userSession = UserSessions::findOrFail($id);
-         
+
 
         $request->validate([
             'discount'=>'required',
             'tax_amount' => 'required',
-            
+
         ]);
 
+        $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+        $total = $userSession-> session_rate - $percent;
+        //dd($total);
         $invoice = new Invoices();
-         
+
         $invoice->invoices_no = $userSession->id;
         $invoice->user_sessions_id = $userSession->id;
         $invoice->from_date  = $userSession-> start_time;
         $invoice->to_date   = $userSession-> end_time;
-        $invoice->amount   = $userSession-> session_rate;
+        // $invoice->amount   = $userSession-> session_rate;
         $invoice-> discount = $request->input('discount');
         $invoice->amount   = $userSession-> session_rate;
-        $invoice->final_amount   = $userSession-> session_rate;
+        $invoice->final_amount   = $total;
         $invoice-> tax_amount = $request->input('tax_amount');
         $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
         $invoice-> is_active = "YES";

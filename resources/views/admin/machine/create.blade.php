@@ -15,7 +15,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="input-field col s12">
                     <select name="is_active">
                       <option value="" disabled selected>Select</option>
@@ -27,7 +27,7 @@
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col s12">
                     <button type="submit" class="btn">Add new machine</button>
@@ -45,9 +45,3 @@
         });
     </script>
 @endsection
-
-
-
-
-
- 

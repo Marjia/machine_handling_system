@@ -11,6 +11,7 @@ use App\Http\Controllers\MachinePostContoller;
 use App\Http\Controllers\UserDeactivationController;
 use App\Http\Controllers\UserPostsController;
 use App\Http\Controllers\UserSessionController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -31,10 +32,12 @@ Route::get(
     '/detag-machine/{id}/detag', [DetagMachineController::class, 'edit']
     )->name('delete-detag');
 
-Route::resource('user', UserPostsController::class)->except(['destroy']);   
+Route::resource('user', UserPostsController::class)->except(['destroy']);
 Route::get('user/{id}/delete',[UserDeactivationController::class, 'edit'])->name('user-delete');
 
 Route::resource('invoice',IsInvoiceController::class)->only(['index','edit','update','show']);
 Route::get('generate-invoice/{id}',[GenerateInvoicePdfController::class,'invoices'])->name('generate-invoices');
 
-Route::resource('user-session',UserSessionController::class)->only(['index']);
+Route::resource('user-session',UserSessionController::class)->only(['index','edit','update']);
+
+Route::get('/profile',[ProfileController::class,'profileController'])->name('profile');

@@ -28,18 +28,18 @@ class AssignMachineController extends Controller
         'user'=>'required',
         'machine_no'=>'required',
         'hourly_session_charge'=>'required',
-        'is_active'=>'required',
+        // 'is_active'=>'required',
         // 'tagged_at'=>'required',
-        
+
       ]);
 
        $taggedMachine = new TaggedUsersMachines();
 
        $taggedMachine-> user_id = $request->input('user');
        $taggedMachine-> machine_id=$request->input('machine_no');
-       $taggedMachine->hourly_session_charge=$request->input('hourly_session_charge'); 
+       $taggedMachine->hourly_session_charge=$request->input('hourly_session_charge');
        $taggedMachine->tagged_at=$request->input('tagged_at');
-       $taggedMachine->is_active=$request->input('is_active');
+       $taggedMachine->is_active="YES";
        $taggedMachine->tagged_by= Auth::user()->id;
        $taggedMachine->tagged_at=  Carbon::now();
     //    $taggedMachine->detagged_by= Auth::user()->id;
@@ -49,7 +49,7 @@ class AssignMachineController extends Controller
 
        $taggedMachine->save();
 
-       
+
 
        $machines = Machines::findOrFail($machine);
 
@@ -66,7 +66,7 @@ class AssignMachineController extends Controller
        $users->save();
 
        return redirect('/tagged-machine');
-      
+
 
     }
 }
