@@ -44,7 +44,17 @@
                   @endphp
 
                 @endforeach
-                <td><a class="btn" href="{{ route('user-session.edit', $tag->id) }}">Start</a></td>
+                <td>
+                  <a class="btn" href="{{ route('user-session.edit', $tag->id) }}">Start</a>
+                  <!-- <div class="switch" id='switchId'>
+                     <label>
+                       Off
+                       <input type="checkbox" id= "@php $tag->id;@endphp" name="switchName">
+                       <span class="lever"></span>
+                       Start
+                     </label>
+                   </div> -->
+                </td>
 
               </tr>
               @empty
@@ -55,3 +65,21 @@
     </div>
 </div>
 @endsection
+<!-- @section('customJs')
+    <script>
+        var switcDiv = document.getElementsByName('switchName');
+
+        switcDiv.forEach((item) => {
+          item.addEventListener('change', function(){
+            //console.log(item.id, item.checked);
+            sessionStart(item.id, item.checked);
+          });
+        });
+
+        function sessionStart(m_id, is_started){
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', 'user-session/'+m_id+'/edit?start=' + is_started, true);
+          xhr.send();
+        }
+    </script>
+@endsection -->

@@ -37,7 +37,7 @@
                 </tr>
                 <tr>
                     <th><h1 class="primary-title">Total :</h1></th>
-                    <td>{{$invoice->total_payable_amount}}.00</td>
+                    <td>{{$invoice->total_payable_amount}}</td>
                 </tr>
                 <tr>
                     <div class="center">
@@ -48,15 +48,7 @@
                     </div>
                 </tr>
             </tbody>
-          </table>   
+          </table>
     </div>
-</div>    
+</div>
 @endsection
-
-
-
-
-
- 
-
-

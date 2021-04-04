@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Machines;
 use Illuminate\Database\Seeder;
 
+
 class MachineSeeder extends Seeder
 {
     /**
@@ -15,29 +16,30 @@ class MachineSeeder extends Seeder
     public function run()
     {
         Machines::create([
-            'machine_no'=>'12machine',
+            'machine_no'=>'M-12',
             'is_active'=>'YES',
-            
+            'created_by' => '2',
+
         ]);
         Machines::create([
-            'machine_no'=>'22machine',
-            'is_active'=>'YES',
-            
+            'machine_no'=>'M-22',
+            'is_active'=> "YES",
+            'created_by' => '2',
         ]);
         Machines::create([
-            'machine_no'=>'32machine',
-            'is_active'=>'YES',
-            
+            'machine_no'=>'M-32',
+            'is_active'=> "YES",
+            'created_by' => '2',
         ]);
         Machines::create([
-            'machine_no'=>'42machine',
-            'is_active'=>'YES',
-            
+            'machine_no'=>'M-42',
+            'is_active'=> "YES",
+            'created_by' => '2',
         ]);
         Machines::create([
-            'machine_no'=>'52machine',
-            'is_active'=>'YES',
-            
+            'machine_no'=>'M-52',
+            'is_active'=> "YES",
+            'created_by' => '2',
         ]);
     }
 }

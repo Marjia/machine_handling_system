@@ -47,7 +47,7 @@
             <div class="col s4">
                 <div class="card-panel teal">
                     <div class="card-action">
-                        <a class="white-text" href="{{route('invoice.index')}}">Invoice</a>
+                        <a class="white-text" href="{{route('invoice.index')}}">Create Invoice</a>
                     </div>
                 </div>
             </div>

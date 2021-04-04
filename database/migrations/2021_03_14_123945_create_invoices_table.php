@@ -23,6 +23,7 @@ class CreateInvoicesTable extends Migration
             $table->double('discount');
             $table->double('final_amount',5,2);
             $table->double('tax_amount');
+            $table->string('is_paid',3)->default('NO');
             $table->double('total_payable_amount');
             $table->string('is_active',3)->default('NO');
             $table->timestamps();

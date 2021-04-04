@@ -2,9 +2,6 @@
 
 @section('content')
 
-<!-- @php
-    dd($tag->user_id);
-@endphp -->
 
 <div class="container">
     <div class="row">
@@ -33,7 +30,7 @@
                 </tr>
                 <tr>
                   <th>Tagged User: </th>
-                  // <td>{{$tag}}</td>
+                  
                 </tr>
             </tbody>
           </table>

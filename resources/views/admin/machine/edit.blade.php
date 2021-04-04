@@ -20,16 +20,23 @@
                     <label>Active</label>
                     <select name="is_active">
                       <option value="">Select</option>
-                      <option value="NO"  
+                      <option value="NO"
                           @php
-                          // ddd(old('is_admin', $userPost->is_admin));
                           echo (old('is_active', $machine->is_active) == 'NO') ? 'selected' : "";
                           @endphp>NO</option>
-                      <option value="YES"  
+                      <option value="YES"
                       @php
                       echo (old('is_active', $machine->is_active) == 'YES') ? 'selected' : "";
                       @endphp>YES</option>
                     </select>
+                    <?php if (Session::has('error')): ?>
+                      <div class="alert alert-danger">
+
+
+                          {{Session::get('error')}}
+
+                      </div>
+                    <?php endif; ?>
                     @error('is_active')
                         <p>{{ $message }}</p>
                     @enderror
@@ -52,9 +59,3 @@
         });
     </script>
 @endsection
-
-
-
-
-
- 

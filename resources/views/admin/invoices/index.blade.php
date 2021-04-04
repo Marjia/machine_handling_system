@@ -8,6 +8,8 @@
         <tr>
             <th>User Name</th>
             <th>Machine No.</th>
+            <th>Start Time</th>
+            <th>End Time</th>
             <th>Payment Status</th>
             <th>Actions</th>
             <th></th>
@@ -15,9 +17,6 @@
       </thead>
       <tbody>
 
-        {{-- @php
-            dd($invoices);
-        @endphp --}}
 
         @forelse ($invoices as $invoice)
         <tr>
@@ -27,22 +26,26 @@
             <td>
                 {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
             </td>
+          <td>{{ $invoice->start_time }}</td>
+          <td>{{ $invoice->end_time }}</td>
           <td>{{ $invoice->is_invoiced }}</td>
-          <td><a class="btn" href="{{ route('invoice.edit', $invoice->id) }}">Pay</a></td>
+          <td>
+            <!-- <a class="btn" href="{{ route('invoice.edit', $invoice->id) }}">create invoice</a> -->
+
+            <p>
+              <label>
+                <input type="checkbox" class="filled-in" checked="checked" />
+                <span>Create Invoice</span>
+              </label>
+            </p>
+          </td>
         </tr>
         @empty
           <tr><td>No session available!!</td></tr>
         @endforelse
       </tbody>
-    </table>                                
+    </table>
   </div>
 </div>
-    
+
 @endsection
-
-
-
-
-
- 
-

@@ -62,28 +62,29 @@ class UserSessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+      $var = $request->all();
+      $user = 0;
+
       $input = TaggedUsersMachines::findOrFail($id);
+        $start_time=Carbon::now();
+        $userSession = new UserSessions();
 
-     // dd($input);
+        $userId = $input->user_id;
 
-      $userSession = new UserSessions();
+        $userSession->user_id=$userId;
+        $userSession->tagged_users_machines_id=$input->id;
+        $userSession->session_rate = $input->hourly_session_charge;
+        $userSession->logged_at=Carbon::now();
+        $userSession->start_time=$start_time;
+        $userSession->save();
 
-      $userSession->user_id=$input->user_id;
-      $userSession->tagged_users_machines_id=$input->id;
-      $userSession->start_time=Carbon::now();
-      $userSession->end_time=Carbon::now();
-      $userSession->session_rate = $input->hourly_session_charge;
-      $userSession->logged_at=Carbon::now();
-
-      $userSession->save();
-
-
-      return redirect('/user-session');
+        return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
+        //return redirect('/user-session');
 
     }
-    // 
+
     // /**
     //  * Update the specified resource in storage.
     //  *
@@ -91,11 +92,11 @@ class UserSessionController extends Controller
     //  * @param  int  $id
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function update(Request $request, $id)
+    // public function update($id)
     // {
-    //     //
-    // }
     //
+    // }
+
     // /**
     //  * Remove the specified resource from storage.
     //  *
