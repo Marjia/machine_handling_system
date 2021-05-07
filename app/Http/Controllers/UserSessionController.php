@@ -80,22 +80,28 @@ class UserSessionController extends Controller
         $userSession->start_time=$start_time;
         $userSession->save();
 
-        return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
-        //return redirect('/user-session');
+        //return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
+        return redirect('/user-session');
 
     }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update($id)
-    // {
-    //
-    // }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update($id)
+    {
+      $userSession = UserSessions::findOrFail($id);
+      $userSession->end_time=Carbon::now();
+      $userSession->save();
+      return redirect('/user-session');
+
+
+
+    }
 
     // /**
     //  * Remove the specified resource from storage.

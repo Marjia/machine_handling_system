@@ -17,11 +17,13 @@
       </thead>
       <tbody>
 
+        <form method="POST"  action="{{ route('invoice.store')}}" class="col s12">
+          @csrf
 
         @forelse ($invoices as $invoice)
         <tr>
             <td>
-                {{$users->find($invoice->taggedUsersMachines()->first()->user_id)->name}}
+                {{$invoice->name}}
             </td>
             <td>
                 {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
@@ -34,15 +36,59 @@
 
             <p>
               <label>
-                <input type="checkbox" class="filled-in" checked="checked" />
-                <span>Create Invoice</span>
+                <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}" />
+                <span></span>
               </label>
             </p>
           </td>
         </tr>
+
         @empty
           <tr><td>No session available!!</td></tr>
         @endforelse
+        <tr>
+          <td>
+            <div class="row">
+                <div class="col s12">
+                    <button type="submit" class="btn">Create Invoice</button>
+                </div>
+            </div>
+          </td>
+
+        </tr>
+        <tr>
+          <td>
+            <div class="row">
+              <div class="input-field col s6">
+                  <!-- <label for="name">Start time : </label> -->
+                  <input type="date" name="machine_no" value="">
+                  <!-- @error('machine_no')
+                      <p>{{ $message }}</p>
+                  @enderror -->
+              </div>
+              <div class="input-field col s6">
+                  <!-- <label for="name">End time : </label> -->
+                  <input type="date" name="machine_no" value="{{ old('name')}}">
+                  <!-- @error('machine_no')
+                      <p>{{ $message }}</p>
+                  @enderror -->
+              </div>
+                <div class="col s6">
+                  <a class="btn" href="{{ route('generate-invoices',$invoice->id) }}">create</a>
+                </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="row">
+                <div class="col s12">
+                  <a class="btn" href="{{ route('generate-invoices',$invoice->id) }}">Generate Invoice</a>
+                </div>
+            </div>
+          </td>
+
+        </tr>
       </tbody>
     </table>
   </div>

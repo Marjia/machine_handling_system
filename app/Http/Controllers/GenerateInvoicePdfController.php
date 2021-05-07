@@ -19,22 +19,22 @@ class GenerateInvoicePdfController extends Controller
         $userSession= UserSessions::findOrFail($invoice->user_sessions_id);
         $machines = Machines::all();
         $tag = TaggedUsersMachines::all();
-        
-        // return view('admin.invoices.createPdf',
-        // ['invoice'=>$invoice,'users'=>$users,
-        // 'usersession'=>$userSession,
-        // 'machine'=>$machines,'tag'=>$tag]);
 
-        $data = [
-            'invoice' => $invoice,
-            'users'=>$users,
-            'usersession'=>$userSession,
-            'machine'=>$machines,
-            'tag'=>$tag
-        ];
-        $pdf = PDF::loadView('admin.invoices.createPdf',$data);
+        return view('admin.invoices.createPdf',
+        ['invoice'=>$invoice,'users'=>$users,
+        'usersession'=>$userSession,
+        'machine'=>$machines,'tag'=>$tag]);
 
-        return $pdf->download('machcinesystem.pdf');
+        // $data = [
+        //     'invoice' => $invoice,
+        //     'users'=>$users,
+        //     'usersession'=>$userSession,
+        //     'machine'=>$machines,
+        //     'tag'=>$tag
+        // ];
+        // $pdf = PDF::loadView('admin.invoices.createPdf',$data);
+        //
+        // return $pdf->download('machcinesystem.pdf');
 
     }
 }

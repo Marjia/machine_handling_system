@@ -35,7 +35,7 @@ Route::get(
 Route::resource('user', UserPostsController::class)->except(['destroy']);
 Route::get('user/{id}/delete',[UserDeactivationController::class, 'edit'])->name('user-delete');
 
-Route::resource('invoice',IsInvoiceController::class)->only(['index','edit','update','show']);
+Route::resource('invoice',IsInvoiceController::class)->only(['index','store','edit','update','show']);
 Route::get('generate-invoice/{id}',[GenerateInvoicePdfController::class,'invoices'])->name('generate-invoices');
 
 Route::resource('user-session',UserSessionController::class)->only(['index','edit','update']);

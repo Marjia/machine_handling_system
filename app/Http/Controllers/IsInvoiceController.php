@@ -18,8 +18,19 @@ class IsInvoiceController extends Controller
      */
     public function index()
     {
-        return view('admin.invoices.index', ['invoices'=> UserSessions::all(),
-        'users'=>User::all(),'machines'=>Machines::all()]);
+
+      $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
+                 ->select(['users.name','user_sessions.id','user_sessions.start_time','user_sessions.end_time','user_sessions.tagged_users_machines_id',
+                 'user_sessions.is_invoiced'])
+                 ->where('is_invoiced','NO')
+                 // ->where('end_time',"!=",'NULL')
+                 ->orderBy('users.name', 'asc')
+                 ->get();
+
+    //  dd($invoices);
+
+        return view('admin.invoices.index', ['invoices'=> $invoices,
+        'machines'=>Machines::all()]);
     }
 
     /**
@@ -37,16 +48,52 @@ class IsInvoiceController extends Controller
     //     return view('admin.invoices.createPdf',['invoices'=>$invoice,'userSession'=>$userSession]);
     // }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+        $var=$request->checkArr;
+        $len= count($var);
+      //  dd($len);
+
+        for ($i=0; $i < $len ; $i++) {
+
+                 //echo $var[$i];
+                  $userSession = UserSessions::findOrFail($var[$i]);
+
+                   //echo $userSession;
+                 //
+
+                  $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+                  $total = $userSession-> session_rate - $percent;
+                  //dd($total);
+                  $invoice = new Invoices();
+
+                  $invoice->invoices_no = $userSession->id;
+                  $invoice->user_sessions_id = $userSession->id;
+                  $invoice->from_date  = $userSession-> start_time;
+                  $invoice->to_date   = $userSession-> end_time;
+                  $invoice->discount = 10;
+                  $invoice->amount   = $userSession->session_rate;
+                  $invoice->final_amount   = $total;
+                  $invoice->tax_amount = 20;
+                  $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+                  $invoice->is_active = "YES";
+                  $invoice->save();
+
+
+                  $userSession->is_invoiced ="YES";
+                  $userSession->save();
+        }
+       return redirect('/invoice');
+
+        //dd($len);
+    }
 
     /**
      * Display the specified resource.
@@ -79,7 +126,7 @@ class IsInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $userSession = UserSessions::findOrFail($id);
 
@@ -111,7 +158,9 @@ class IsInvoiceController extends Controller
         $userSession->is_invoiced ="YES";
         $userSession->save();
 
-        return redirect(route('invoice.show',$invoice->id));
+        //return redirect(route('invoice.show',$invoice->id));
+
+        return redirect('/invoice');
     }
 
     // /**

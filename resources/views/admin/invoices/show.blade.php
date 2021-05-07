@@ -44,7 +44,9 @@
                         {{-- @php
                             dd($invoice->id);
                         @endphp --}}
-                        <td><a class="btn" href="{{ route('generate-invoices',$invoice->id) }}">Generate Invoice</a></td>
+                        <td>
+                          <a class="btn" href="{{ route('generate-invoices',$invoice->id) }}">Generate Invoice</a>
+                        </td>
                     </div>
                 </tr>
             </tbody>
