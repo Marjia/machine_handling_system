@@ -56,27 +56,40 @@
           </td>
 
         </tr>
+    </form>
         <tr>
           <td>
-            <div class="row">
-              <div class="input-field col s6">
-                  <!-- <label for="name">Start time : </label> -->
-                  <input type="date" name="machine_no" value="">
-                  <!-- @error('machine_no')
-                      <p>{{ $message }}</p>
-                  @enderror -->
-              </div>
-              <div class="input-field col s6">
-                  <!-- <label for="name">End time : </label> -->
-                  <input type="date" name="machine_no" value="{{ old('name')}}">
-                  <!-- @error('machine_no')
-                      <p>{{ $message }}</p>
-                  @enderror -->
-              </div>
-                <div class="col s6">
-                  <a class="btn" href="{{ route('generate-invoices',$invoice->id) }}">create</a>
+            <form method="POST"  action="{{ route('date-invoice.store') }}" class="col s12" >
+              @csrf
+              <!-- @method('PUT') -->
+              <div class="row">
+                <div class="input-field col s6">
+                    <!-- <label for="name">Start time : </label> -->
+                    <!-- <input type="date" name="machine_no" value=""> -->
+                    <!-- @error('machine_no')
+                        <p>{{ $message }}</p>
+                    @enderror -->
+
+                      <input type="text" class="datepicker" name="start_date">
+                      <input type="text" class="timepicker" name="start_time">
+
+
                 </div>
-            </div>
+                <div class="input-field col s6">
+                    <!-- <label for="name">End time : </label> -->
+
+                        <input type="text" class="datepicker" name="end_date">
+                        <input type="text" class="timepicker" name="end_time">
+
+                    <!-- @error('machine_no')
+                        <p>{{ $message }}</p>
+                    @enderror -->
+                </div>
+                  <div class="col s6">
+                    <button type="submit" class="btn">Create Invoice</button>
+                  </div>
+              </div>
+            </form>
           </td>
         </tr>
         <tr>
@@ -93,5 +106,19 @@
     </table>
   </div>
 </div>
+
+@endsection
+@section('customJs')
+      <script type="text/javascript">
+
+      document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.datepicker');
+          // console.log(elems);
+          var instances = M.Datepicker.init(elems);
+          var elems = document.querySelectorAll('.timepicker');
+          var instances = M.Timepicker.init(elems);
+          });
+
+      </script>
 
 @endsection

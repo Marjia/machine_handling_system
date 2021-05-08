@@ -38,15 +38,15 @@ class IsInvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function create($id)
-    // {
+    public function create(Request $request)
+    {
 
-    //     $invoice = Invoices::findOrFail($id);
+        $invoice = $request->all();
 
-    //     dd($invoice);
-    //     $userSession = UserSessions::where($invoice->user_sessions_id,'==','id');
-    //     return view('admin.invoices.createPdf',['invoices'=>$invoice,'userSession'=>$userSession]);
-    // }
+        dd( $request->all());
+        $userSession = UserSessions::where($invoice->user_sessions_id,'==','id');
+        return view('admin.invoices.createPdf',['invoices'=>$invoice,'userSession'=>$userSession]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -112,11 +112,12 @@ class IsInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $invoice = UserSessions::findOrFail($id);
+        $invoice = $request->all();
+        dd($invoice);
 
-        return view('admin.invoices.create',['invoices'=>$invoice]);
+        //return view('admin.invoices.create',['invoices'=>$invoice]);
     }
 
     /**
@@ -128,39 +129,42 @@ class IsInvoiceController extends Controller
      */
     public function update(Request $request)
     {
-        $userSession = UserSessions::findOrFail($id);
+
+        dd($request->all());
+
+        //$userSession = UserSessions::findOrFail($id);
 
 
-        $request->validate([
-            'discount'=>'required',
-            'tax_amount' => 'required',
-
-        ]);
-
-        $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
-        $total = $userSession-> session_rate - $percent;
-        //dd($total);
-        $invoice = new Invoices();
-
-        $invoice->invoices_no = $userSession->id;
-        $invoice->user_sessions_id = $userSession->id;
-        $invoice->from_date  = $userSession-> start_time;
-        $invoice->to_date   = $userSession-> end_time;
-        $invoice-> discount = $request->input('discount');
-        $invoice->amount   = $userSession-> session_rate;
-        $invoice->final_amount   = $total;
-        $invoice-> tax_amount = $request->input('tax_amount');
-        $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
-        $invoice-> is_active = "YES";
-        $invoice->save();
-
-
-        $userSession->is_invoiced ="YES";
-        $userSession->save();
-
-        //return redirect(route('invoice.show',$invoice->id));
-
-        return redirect('/invoice');
+        // $request->validate([
+        //     'discount'=>'required',
+        //     'tax_amount' => 'required',
+        //
+        // ]);
+        //
+        // $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+        // $total = $userSession-> session_rate - $percent;
+        // //dd($total);
+        // $invoice = new Invoices();
+        //
+        // $invoice->invoices_no = $userSession->id;
+        // $invoice->user_sessions_id = $userSession->id;
+        // $invoice->from_date  = $userSession-> start_time;
+        // $invoice->to_date   = $userSession-> end_time;
+        // $invoice-> discount = $request->input('discount');
+        // $invoice->amount   = $userSession-> session_rate;
+        // $invoice->final_amount   = $total;
+        // $invoice-> tax_amount = $request->input('tax_amount');
+        // $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+        // $invoice-> is_active = "YES";
+        // $invoice->save();
+        //
+        //
+        // $userSession->is_invoiced ="YES";
+        // $userSession->save();
+        //
+        // //return redirect(route('invoice.show',$invoice->id));
+        //
+        // return redirect('/invoice');
     }
 
     // /**
