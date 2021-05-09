@@ -70,16 +70,16 @@
                         <p>{{ $message }}</p>
                     @enderror -->
 
-                      <input type="text" class="datepicker" name="start_date">
-                      <input type="text" class="timepicker" name="start_time">
+                      <input type="text" class="datepicker" name="start_date" value="<?php echo date("Y-m-d", strtotime($invoices[0]->start_time));?>" required>
+                      <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A", strtotime($invoices[0]->start_time));?>" required>
 
 
                 </div>
                 <div class="input-field col s6">
                     <!-- <label for="name">End time : </label> -->
 
-                        <input type="text" class="datepicker" name="end_date">
-                        <input type="text" class="timepicker" name="end_time">
+                        <input type="text" class="datepicker" name="end_date" value="<?php echo date("Y-m-d", strtotime($invoices[1]->start_time));?>" required>
+                        <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A", strtotime($invoices[1]->start_time));?>" required>
 
                     <!-- @error('machine_no')
                         <p>{{ $message }}</p>

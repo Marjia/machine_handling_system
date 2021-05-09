@@ -53,9 +53,64 @@ class DatePickerInvoice extends Controller
         //dd($request->all());
         $inputs = $request->all();
         $startDateTimeStr = $inputs['start_date'] . " " . $inputs['start_time'];
-        dd($startDateTimeStr);
-        $startDateTime = Carbon::parse($startDateTimeStr);
-        dd($startDateTime);
+        $endDateTimeStr = $inputs['end_date'] . " " . $inputs['end_time'];
+        // Amar bujte subista hobe
+        $startDateTime = Carbon::parse($startDateTimeStr)->format('Y-m-d H:i:s');
+        // Subusta
+        $endDateTime = Carbon::parse($endDateTimeStr)->format('Y-m-d H:i:s');
+        // dd($startDateTime);
+        // Hello
+        // ddd($startDateTime, $endDateTime);
+
+      if($startDateTime<$endDateTime)
+      {
+        echo "comparison done";
+      }
+      else {
+        echo"No";
+      }
+        $userSession = UserSessions::where("start_time",">=", $startDateTime)
+                                ->where("start_time","<=", $endDateTime)
+                                ->get();
+
+    //  dd($invoice->all());
+
+        $var= $userSession->all();
+        $len= count($var);
+        //dd($len);
+
+        for ($i=0; $i < $len ; $i++) {
+
+                 //echo $var[$i];
+                  // $userSession = UserSessions::findOrFail($i);
+                  //
+              //  echo $userSession[$i];
+
+
+                  $percent = ($request->input('discount') * $userSession[$i]-> session_rate) / 100;
+                  $total = $userSession[$i]-> session_rate - $percent;
+                  //dd($total);
+                  $invoice = new Invoices();
+
+                  $invoice->invoices_no = $userSession[$i]->id;
+                  $invoice->user_sessions_id = $userSession[$i]->id;
+                  $invoice->from_date  = $userSession[$i]-> start_time;
+                  $invoice->to_date   = $userSession[$i]-> end_time;
+                  $invoice->discount = 10;
+                  $invoice->amount   = $userSession[$i]->session_rate;
+                  $invoice->final_amount   = $total;
+                  $invoice->tax_amount = 20;
+                  $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+                  $invoice->is_active = "YES";
+                  $invoice->save();
+
+
+                  $userSession[$i]->is_invoiced ="YES";
+                  $userSession[$i]->save();
+        }
+       //return redirect('/invoice');
+
+        //ddd(gettype($startDateTime));
     }
     //
     // /**
