@@ -64,11 +64,7 @@ class DatePickerInvoice extends Controller
 
       if($startDateTime<$endDateTime)
       {
-        echo "comparison done";
-      }
-      else {
-        echo"No";
-      }
+
         $userSession = UserSessions::where("start_time",">=", $startDateTime)
                                 ->where("start_time","<=", $endDateTime)
                                 ->get();
@@ -81,10 +77,10 @@ class DatePickerInvoice extends Controller
 
         for ($i=0; $i < $len ; $i++) {
 
-                 //echo $var[$i];
-                  // $userSession = UserSessions::findOrFail($i);
-                  //
-              //  echo $userSession[$i];
+              //   echo $var[$i];
+                  //$userSession = UserSessions::findOrFail($i);
+
+               echo $userSession[$i]."  "."\n";
 
 
                   $percent = ($request->input('discount') * $userSession[$i]-> session_rate) / 100;
@@ -110,6 +106,11 @@ class DatePickerInvoice extends Controller
         }
        //return redirect('/invoice');
 
+        echo "comparison done\n\n";
+      }
+      else {
+        return back()->with('error','please enter valid date');
+      }
         //ddd(gettype($startDateTime));
     }
     //

@@ -57,10 +57,16 @@ class IsInvoiceController extends Controller
     public function store(Request $request)
     {
 
-        $var=$request->checkArr;
-        $len= count($var);
-      //  dd($len);
+      //  dd($request);
 
+      if($request->checkArr==NULL){
+        return back()->with('error','select to create invoice');
+      }
+      else {
+
+
+                $var=$request->checkArr;
+                $len= count($var);
         for ($i=0; $i < $len ; $i++) {
 
                  //echo $var[$i];
@@ -91,7 +97,7 @@ class IsInvoiceController extends Controller
                   $userSession->save();
         }
        return redirect('/invoice');
-
+     }
         //dd($len);
     }
 

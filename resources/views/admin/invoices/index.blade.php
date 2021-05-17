@@ -51,6 +51,14 @@
             <div class="row">
                 <div class="col s12">
                     <button type="submit" class="btn">Create Invoice</button>
+                    <?php if (Session::has('error')): ?>
+                      <div class="alert alert-danger">
+
+
+                          {{Session::get('error')}}
+
+                      </div>
+                    <?php endif; ?>
                 </div>
             </div>
           </td>
@@ -64,27 +72,25 @@
               <!-- @method('PUT') -->
               <div class="row">
                 <div class="input-field col s6">
-                    <!-- <label for="name">Start time : </label> -->
-                    <!-- <input type="date" name="machine_no" value=""> -->
-                    <!-- @error('machine_no')
-                        <p>{{ $message }}</p>
-                    @enderror -->
-
+                       <label>From Date Time</label>
                       <input type="text" class="datepicker" name="start_date" value="<?php echo date("Y-m-d", strtotime($invoices[0]->start_time));?>" required>
                       <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A", strtotime($invoices[0]->start_time));?>" required>
-
-
                 </div>
                 <div class="input-field col s6">
-                    <!-- <label for="name">End time : </label> -->
-
+                        <label>To Date Time</label>
                         <input type="text" class="datepicker" name="end_date" value="<?php echo date("Y-m-d", strtotime($invoices[1]->start_time));?>" required>
                         <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A", strtotime($invoices[1]->start_time));?>" required>
 
-                    <!-- @error('machine_no')
-                        <p>{{ $message }}</p>
-                    @enderror -->
+                        <?php if (Session::has('error')): ?>
+                          <div class="alert alert-danger">
+
+
+                              {{Session::get('error')}}
+
+                          </div>
+                        <?php endif; ?>
                 </div>
+
                   <div class="col s6">
                     <button type="submit" class="btn">Create Invoice</button>
                   </div>
@@ -96,7 +102,7 @@
           <td>
             <div class="row">
                 <div class="col s12">
-                  <a class="btn" href="{{ route('generate-invoices',$invoice->id) }}">Generate Invoice</a>
+                  <a class="btn" href="{{ route('create-pdf') }}">Generate Invoice</a>
                 </div>
             </div>
           </td>
