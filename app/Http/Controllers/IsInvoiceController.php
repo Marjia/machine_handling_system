@@ -20,14 +20,16 @@ class IsInvoiceController extends Controller
     {
 
       $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 ->select(['users.name','user_sessions.id','user_sessions.start_time','user_sessions.end_time','user_sessions.tagged_users_machines_id',
+                 ->select(['users.name','user_sessions.id','user_sessions.start_time',
+                 'user_sessions.end_time','user_sessions.tagged_users_machines_id',
                  'user_sessions.is_invoiced'])
                  ->where('is_invoiced','NO')
                  // ->where('end_time',"!=",'NULL')
+                 //->orderBy('user_sessions.tagged_users_machines_id','asc')
                  ->orderBy('users.name', 'asc')
                  ->get();
 
-    //  dd($invoices);
+    // dd($invoices);
 
         return view('admin.invoices.index', ['invoices'=> $invoices,
         'machines'=>Machines::all()]);
@@ -57,7 +59,7 @@ class IsInvoiceController extends Controller
     public function store(Request $request)
     {
 
-      //  dd($request);
+       dd($request->discount);
 
       if($request->checkArr==NULL){
         return back()->with('error','select to create invoice');
@@ -84,7 +86,7 @@ class IsInvoiceController extends Controller
                   $invoice->user_sessions_id = $userSession->id;
                   $invoice->from_date  = $userSession-> start_time;
                   $invoice->to_date   = $userSession-> end_time;
-                  $invoice->discount = 10;
+                  $invoice->discount = $request->discount;
                   $invoice->amount   = $userSession->session_rate;
                   $invoice->final_amount   = $total;
                   $invoice->tax_amount = 20;
@@ -107,9 +109,9 @@ class IsInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        return view('admin.invoices.show',['invoice'=> Invoices::findOrFail($id)]);
+        return view('admin.invoices.show',['invoices'=> Invoices::all()]);
     }
 
     /**

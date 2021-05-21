@@ -7,6 +7,7 @@
       <thead>
         <tr>
             <th>User Name</th>
+            <th>tagged Id</th>
             <th>Machine No.</th>
             <th>Start Time</th>
             <th>End Time</th>
@@ -17,14 +18,42 @@
       </thead>
       <tbody>
 
-        <form method="POST"  action="{{ route('invoice.store')}}" class="col s12">
+        <form method="POST"  action="{{ route('invoice.store')}}" class="col s12>
           @csrf
 
-        @forelse ($invoices as $invoice)
+
+
+       <ul>
+          <?php $ind=0; ?>
+           @forelse ($invoices as $invoice)
+          <?php $break_loop=0; ?>
+           <li>
+             {{$invoice->name}}
+
+             @while ($break_loop==0)
+                 <?php
+                 if($invoices[$ind]->tagged_users_machines_id != $invoices[$ind+1]->tagged_users_machines_id)
+                  {
+                    $break_loop=1;
+                  }
+                 ?>
+                 <p>
+                   {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
+                 </p>
+
+              //The user id is less then five;
+
+            @endwhile
+
+
+           </li>
+      </ul>
+
         <tr>
             <td>
                 {{$invoice->name}}
             </td>
+            <td>{{$invoice->tagged_users_machines_id}}</td>
             <td>
                 {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
             </td>
@@ -32,11 +61,9 @@
           <td>{{ $invoice->end_time }}</td>
           <td>{{ $invoice->is_invoiced }}</td>
           <td>
-            <!-- <a class="btn" href="{{ route('invoice.edit', $invoice->id) }}">create invoice</a> -->
-
             <p>
               <label>
-                <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}" />
+                <input type="checkbox" class="filled-in" name="checkArr[]"/>
                 <span></span>
               </label>
             </p>
@@ -49,7 +76,12 @@
         <tr>
           <td>
             <div class="row">
-                <div class="col s12">
+              <div class="input-field col s6">
+                <label>Discount Rate</label>
+                <input type="number" name="discount" value="discount">
+              </div>
+                <div class="col s6">
+
                     <button type="submit" class="btn">Create Invoice</button>
                     <?php if (Session::has('error')): ?>
                       <div class="alert alert-danger">
@@ -102,7 +134,7 @@
           <td>
             <div class="row">
                 <div class="col s12">
-                  <a class="btn" href="{{ route('create-pdf') }}">Generate Invoice</a>
+                  <a class="btn" href="{{ route('invoice.show',1) }}">Generate Invoice</a>
                 </div>
             </div>
           </td>
