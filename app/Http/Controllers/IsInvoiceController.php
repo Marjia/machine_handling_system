@@ -20,7 +20,7 @@ class IsInvoiceController extends Controller
     {
 
       $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 ->select(['users.name','user_sessions.id','user_sessions.start_time',
+                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time',
                  'user_sessions.end_time','user_sessions.tagged_users_machines_id',
                  'user_sessions.is_invoiced'])
                  ->where('is_invoiced','NO')
@@ -30,6 +30,19 @@ class IsInvoiceController extends Controller
                  ->get();
 
     // dd($invoices);
+
+    $arrayOfTaggedId = [];
+
+    foreach ($invoices as $taggedId) {
+      echo $taggedId->user_id."\n\n".$taggedId->tagged_users_machines_id;
+      array_push($taggedId->tagged_users_machines_id, $arrayOfTaggedId[$taggedId->user_id]);
+    }
+
+    print_r($arrayOfTaggedId);
+    dd();
+
+
+
 
         return view('admin.invoices.index', ['invoices'=> $invoices,
         'machines'=>Machines::all()]);
@@ -59,7 +72,7 @@ class IsInvoiceController extends Controller
     public function store(Request $request)
     {
 
-       dd($request->discount);
+       // dd($request->discount);
 
       if($request->checkArr==NULL){
         return back()->with('error','select to create invoice');
@@ -86,7 +99,7 @@ class IsInvoiceController extends Controller
                   $invoice->user_sessions_id = $userSession->id;
                   $invoice->from_date  = $userSession-> start_time;
                   $invoice->to_date   = $userSession-> end_time;
-                  $invoice->discount = $request->discount;
+                  $invoice->discount = 10;
                   $invoice->amount   = $userSession->session_rate;
                   $invoice->final_amount   = $total;
                   $invoice->tax_amount = 20;

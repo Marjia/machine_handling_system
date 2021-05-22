@@ -18,38 +18,11 @@
       </thead>
       <tbody>
 
-        <form method="POST"  action="{{ route('invoice.store')}}" class="col s12>
+        <form method="POST"  action="{{ route('invoice.store')}}" class="col s12">
           @csrf
 
-
-
-       <ul>
-          <?php $ind=0; ?>
-           @forelse ($invoices as $invoice)
-          <?php $break_loop=0; ?>
-           <li>
-             {{$invoice->name}}
-
-             @while ($break_loop==0)
-                 <?php
-                 if($invoices[$ind]->tagged_users_machines_id != $invoices[$ind+1]->tagged_users_machines_id)
-                  {
-                    $break_loop=1;
-                  }
-                 ?>
-                 <p>
-                   {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
-                 </p>
-
-              //The user id is less then five;
-
-            @endwhile
-
-
-           </li>
-      </ul>
-
         <tr>
+           @forelse ($invoices as $invoice)
             <td>
                 {{$invoice->name}}
             </td>
@@ -63,7 +36,7 @@
           <td>
             <p>
               <label>
-                <input type="checkbox" class="filled-in" name="checkArr[]"/>
+                <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}"/>
                 <span></span>
               </label>
             </p>
@@ -76,10 +49,10 @@
         <tr>
           <td>
             <div class="row">
-              <div class="input-field col s6">
+              <!-- <div class="input-field col s6">
                 <label>Discount Rate</label>
                 <input type="number" name="discount" value="discount">
-              </div>
+              </div> -->
                 <div class="col s6">
 
                     <button type="submit" class="btn">Create Invoice</button>
