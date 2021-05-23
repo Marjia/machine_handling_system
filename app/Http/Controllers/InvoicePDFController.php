@@ -165,14 +165,14 @@ class InvoicePDFController extends Controller {
         $this->pdf->Cell(30,8,'5% Tax',1,0,'C',true);
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,8,'Payable (AED)',1,0,'C',true);
-
-// loop code
-
-// dd($request->checkArr);
-//   $arrayVar = $request->checkArr;
-//   $len = count($arrayVar);
-  $var = 99;
- for ($i=0; $i <24 ; $i++) {
+//
+// // loop code
+//
+// // dd($request->checkArr);
+// //   $arrayVar = $request->checkArr;
+// //   $len = count($arrayVar);
+   $var = 99;
+ for ($i=0; $i <100 ; $i++) {
 //30
 
    //$invoice = Invoices::findOrFail(3);
@@ -217,11 +217,14 @@ class InvoicePDFController extends Controller {
    $this->pdf->SetFont('Arial','',11);
    $this->pdf->Cell(30,5,109.56,1,0,'C');
 
-   if($i>=30){
+   if($var>=$this->pdf->GetPageheight()-30 ){
 
-     //$this->pdf->SetAutoPageBreak(25);
+     //$this->pdf->SetAutoPageBreak(true);
      $this->pdf->AddPage();
+     $this->Footer();
+     $var=5;
    }
+
 
    $var =$var+5;
 
@@ -229,6 +232,7 @@ class InvoicePDFController extends Controller {
 
 
 //Banking Detail
+
 
 $varY = $var+10;
         $this->pdf->Ln(0);
@@ -333,7 +337,7 @@ $varY = $var+10;
         $this->pdf->Cell(41,6,'405.00  BDT',1,0,'L');
         $this->pdf->Ln(40);
 
-        //dd($this->pdf->GetY(),$varY+30,$this->pdf->GetPageheight());
+    //    dd($this->pdf->GetY(),$this->pdf->GetPageheight());
 
         $this->pdf->Output('invoice_file.php', 'I');
         exit;

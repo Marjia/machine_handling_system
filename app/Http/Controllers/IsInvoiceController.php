@@ -30,22 +30,33 @@ class IsInvoiceController extends Controller
                  ->get();
 
     // dd($invoices);
-
-    $arrayOfTaggedId = [];
-
-    foreach ($invoices as $taggedId) {
-      echo $taggedId->user_id."\n\n".$taggedId->tagged_users_machines_id;
-      array_push($taggedId->tagged_users_machines_id, $arrayOfTaggedId[$taggedId->user_id]);
-    }
-
-    print_r($arrayOfTaggedId);
-    dd();
+    //
+    // $arrayOfTaggedId = [];
+    //
+    // foreach ($invoices as $taggedId) {
+    //   //echo $taggedId->user_id."\n\n".$taggedId->tagged_users_machines_id."\n\n";
+    //   if (isset($arrayOfTaggedId[$taggedId->user_id])) {
+    //     $i = count($arrayOfTaggedId[$taggedId->user_id]);
+    //   } else{
+    //     $i = 0;
+    //   }
+    //   $arrayOfTaggedId[$taggedId->user_id][$i] = $taggedId->tagged_users_machines_id;
+    //
+    // // else {
+    //   //array_push( $taggedId->tagged_users_machines_id, $arrayOfTaggedId[$taggedId->user_id][i]);
+    // // }
+    // }
+    //
+    // dd($arrayOfTaggedId);
+    // dd();
 
 
 
 
         return view('admin.invoices.index', ['invoices'=> $invoices,
         'machines'=>Machines::all()]);
+
+        //'arrayOfTaggedId'=$arrayOfTaggedId
     }
 
     /**
