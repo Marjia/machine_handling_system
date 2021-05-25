@@ -10,6 +10,28 @@ class InvoicePDFController extends Controller {
     private $pdf;
     //public function __construct(){}
 
+    function Header(){
+      //header and logo
+       $this->pdf->SetFont('Arial','B',10);
+       $this->pdf->SetY(10);
+       $this->pdf->SetX(23);
+       $this->pdf->SetFillColor(0,0,0);
+       $this->pdf->SetTextColor(255,255,255);
+       $this->pdf->MultiCell(39,8,'Machine Handling System',0,'C',true);
+       $this->pdf->Ln(1);
+
+      $this->pdf->SetFont('Arial','',10.5);
+      $this->pdf->SetY(12);
+      $this->pdf->SetX(66);
+      $this->pdf->SetTextColor(0,0,0);
+      //cell(width,height,text,border,end line,align)
+      $this->pdf->Cell(100,6,'Mirpur DOHS, 11 Avenue-11 House #1188, Flat #A1',0,0,'L');
+      $this->pdf->SetY(19);
+      $this->pdf->SetX(66);
+      $this->pdf->Cell(100,6,'info@kazispin.com https://kazispin.com +8801404040575',0,0,'L');
+      $this->pdf->Ln(20);
+      }
+
     function Footer(){
         // Go to 1.5 cm from bottom
         $this->pdf->SetY(-20.5);
@@ -24,29 +46,12 @@ class InvoicePDFController extends Controller {
         $this->pdf = new Fpdf();
         // This Create New Pdf page
         $this->pdf->AddPage('P', 'A4', 0);
+        $this->Header();
         $this->Footer();
         $this->pdf->AliasNbPages();
 
 
-        //header and logo
-         $this->pdf->SetFont('Arial','B',10);
-         $this->pdf->SetY(10);
-         $this->pdf->SetX(23);
-         $this->pdf->SetFillColor(0,0,0);
-         $this->pdf->SetTextColor(255,255,255);
-         $this->pdf->MultiCell(39,8,'Machine Handling System',0,'C',true);
-         $this->pdf->Ln(1);
 
-        $this->pdf->SetFont('Arial','',10.5);
-        $this->pdf->SetY(12);
-        $this->pdf->SetX(66);
-        $this->pdf->SetTextColor(0,0,0);
-        //cell(width,height,text,border,end line,align)
-        $this->pdf->Cell(100,6,'Mirpur DOHS, 11 Avenue-11 House #1188, Flat #A1',0,0,'L');
-        $this->pdf->SetY(19);
-        $this->pdf->SetX(66);
-        $this->pdf->Cell(100,6,'info@kazispin.com https://kazispin.com +8801404040575',0,0,'L');
-        $this->pdf->Ln(20);
 
         //title cell
 
@@ -221,8 +226,9 @@ class InvoicePDFController extends Controller {
 
      //$this->pdf->SetAutoPageBreak(true);
      $this->pdf->AddPage();
+     $this->Header();
      $this->Footer();
-     $var=5;
+     $var=19+15;
    }
 
 

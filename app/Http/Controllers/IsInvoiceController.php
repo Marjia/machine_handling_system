@@ -20,12 +20,15 @@ class IsInvoiceController extends Controller
     {
 
       $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time',
+                 //->join('invoices','user_sessions_id','=','user_sessions.id')
+                 ->select(['users.name','user_sessions.user_id','user_sessions.id',
+                 'user_sessions.start_time',
                  'user_sessions.end_time','user_sessions.tagged_users_machines_id',
-                 'user_sessions.is_invoiced'])
+                 'user_sessions.is_invoiced'])//,'invoices.amount','invoices.discount',
+                // 'invoices.final_amount','invoices.tax_amount'])
                  ->where('is_invoiced','NO')
                  // ->where('end_time',"!=",'NULL')
-                 //->orderBy('user_sessions.tagged_users_machines_id','asc')
+                 ->orderBy('user_sessions.tagged_users_machines_id','asc')
                  ->orderBy('users.name', 'asc')
                  ->get();
 
@@ -47,7 +50,7 @@ class IsInvoiceController extends Controller
     // // }
     // }
     //
-    // dd($arrayOfTaggedId);
+    //  dd($arrayOfTaggedId);
     // dd();
 
 
@@ -56,7 +59,7 @@ class IsInvoiceController extends Controller
         return view('admin.invoices.index', ['invoices'=> $invoices,
         'machines'=>Machines::all()]);
 
-        //'arrayOfTaggedId'=$arrayOfTaggedId
+        //'arrayOfTaggedId'=>$arrayOfTaggedId
     }
 
     /**
