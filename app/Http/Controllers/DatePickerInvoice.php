@@ -67,6 +67,7 @@ class DatePickerInvoice extends Controller
 
         $userSession = UserSessions::where("start_time",">=", $startDateTime)
                                 ->where("start_time","<=", $endDateTime)
+                                ->where('is_invoiced','NO')
                                 ->get();
 
     //  dd($invoice->all());
@@ -104,9 +105,9 @@ class DatePickerInvoice extends Controller
                   $userSession[$i]->is_invoiced ="YES";
                   $userSession[$i]->save();
         }
-       //return redirect('/invoice');
+       return redirect('/invoice');
 
-        echo "comparison done\n\n";
+        //echo "comparison done\n\n";
       }
       else {
         return back()->with('error','please enter valid date');

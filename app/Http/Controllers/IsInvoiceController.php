@@ -28,8 +28,8 @@ class IsInvoiceController extends Controller
                 // 'invoices.final_amount','invoices.tax_amount'])
                  ->where('is_invoiced','NO')
                  // ->where('end_time',"!=",'NULL')
-                 ->orderBy('user_sessions.tagged_users_machines_id','asc')
                  ->orderBy('users.name', 'asc')
+                 ->orderBy('user_sessions.tagged_users_machines_id','asc')
                  ->get();
 
     // dd($invoices);
@@ -86,7 +86,17 @@ class IsInvoiceController extends Controller
     public function store(Request $request)
     {
 
-       // dd($request->discount);
+       //dd($request->checkArr);
+
+       //dd
+
+       if($request->discount == NULL)
+       {
+         $discount = 0;
+       }
+       else {
+         $discount = $request->discount;
+       }
 
       if($request->checkArr==NULL){
         return back()->with('error','select to create invoice');
@@ -96,36 +106,52 @@ class IsInvoiceController extends Controller
 
                 $var=$request->checkArr;
                 $len= count($var);
+                //dd($len);
+                echo $len."\n\n\n";
+                  $userSession = UserSessions::findOrFail($var);
+                  arrSrt[]=sort($userSession->tagged_users_machines_id);
+
         for ($i=0; $i < $len ; $i++) {
+               //asort($userSession[$i]->tagged_users_machines_id);
 
-                 //echo $var[$i];
-                  $userSession = UserSessions::findOrFail($var[$i]);
-
-                   //echo $userSession;
+                 echo $userSession[$i]->tagged_users_machines_id;
+                 //echo $var[$i]."\n\n\n";
+                  // $userSession = UserSessions::findOrFail($var);
+                  //
+                  // if($i!=$len-1){
+                  //   if ($userSession[$i]->tagged_users_machines_id==$userSession[$i+1]->tagged_users_machines_id) {
+                  //     echo "same\n\n\n\n";
+                  //   }
+                  //   else {
+                  //     echo "different\n\n\n\n";
+                  //   }
+                  // }
+                  //
+                  //  echo "tagged\n\n\n\n".$userSession[$i]->tagged_users_machines_id;
                  //
-
-                  $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
-                  $total = $userSession-> session_rate - $percent;
-                  //dd($total);
-                  $invoice = new Invoices();
-
-                  $invoice->invoices_no = $userSession->id;
-                  $invoice->user_sessions_id = $userSession->id;
-                  $invoice->from_date  = $userSession-> start_time;
-                  $invoice->to_date   = $userSession-> end_time;
-                  $invoice->discount = 10;
-                  $invoice->amount   = $userSession->session_rate;
-                  $invoice->final_amount   = $total;
-                  $invoice->tax_amount = 20;
-                  $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
-                  $invoice->is_active = "YES";
-                  $invoice->save();
-
-
-                  $userSession->is_invoiced ="YES";
-                  $userSession->save();
+                  //
+                  // $percent = ($discount * $userSession-> session_rate) / 100;
+                  // $total = $userSession->session_rate - $percent;
+                  // //dd($total);
+                  // $invoice = new Invoices();
+                  //
+                  // $invoice->invoices_no = $userSession->id;
+                  // $invoice->user_sessions_id = $userSession->id;
+                  // $invoice->from_date  = $userSession-> start_time;
+                  // $invoice->to_date   = $userSession-> end_time;
+                  // $invoice->discount = $discount;
+                  // $invoice->amount   = $userSession->session_rate;
+                  // $invoice->final_amount   = $total;
+                  // $invoice->tax_amount = 20;
+                  // $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+                  // $invoice->is_active = "YES";
+                  // $invoice->save();
+                  //
+                  //
+                  // $userSession->is_invoiced ="YES";
+                  // $userSession->save();
         }
-       return redirect('/invoice');
+       //return redirect('/invoice');
      }
         //dd($len);
     }

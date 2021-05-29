@@ -78,6 +78,11 @@ class UserSessionController extends Controller
         $userSession->session_rate = $input->hourly_session_charge;
         $userSession->logged_at=Carbon::now();
         $userSession->start_time=$start_time;
+        if($userId%2 != 0){
+        $userSession->end_time=Carbon::now()->addDay();}
+        else {
+          $userSession->end_time=Carbon::now()->addDay(2);
+        }
         $userSession->save();
 
         //return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
@@ -92,16 +97,16 @@ class UserSessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update($id)
-    {
-      $userSession = UserSessions::findOrFail($id);
-      $userSession->end_time=Carbon::now();
-      $userSession->save();
-      return redirect('/user-session');
-
-
-
-    }
+    // public function update($id)
+    // {
+    //   $userSession = UserSessions::findOrFail($id);
+    //   $userSession->end_time=Carbon::now();
+    //   $userSession->save();
+    //   return redirect('/user-session');
+    //
+    //
+    //
+    // }
 
     // /**
     //  * Remove the specified resource from storage.

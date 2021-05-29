@@ -88,13 +88,9 @@
           <td>{{ $invoice->is_invoiced }}</td>
           <td>
             <?php
-             if ($invoices[$i]->tagged_users_machines_id!=$invoices[$i+1]->tagged_users_machines_id)
-              {
-               // code...
-
+             // if ($invoices[$i]->tagged_users_machines_id!=$invoices[$i+1]->tagged_users_machines_id)
+             //  {
             ?>
-
-
             <p>
               <label>
                 <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}"/>
@@ -103,9 +99,9 @@
             </p>
           </td>
           <?php
-           }
-           $i++;
-           ?>
+           // }
+           // $i++;
+           // ?>
         </tr>
 
         @empty
@@ -114,12 +110,12 @@
         <tr>
           <td>
             <div class="row">
-              <!-- <div class="input-field col s6">
+              <div class="input-field col s12">
                 <label>Discount Rate</label>
                 <input type="number" name="discount" value="discount">
-              </div> -->
-                <div class="col s6">
-
+              </div>
+                <div class="col s12">
+ <!-- style="border: 5px solid red;float:left" -->
                     <button type="submit" class="btn">Create Invoice</button>
                     <?php if (Session::has('error')): ?>
                       <div class="alert alert-danger">

@@ -56,11 +56,11 @@
                    </div> -->
                 </td>
                 <td>
-                  <form  method="post"  action="{{ route('user-session.update', $tag->id) }}">
+                  <!-- <form  method="post"  action="{{ route('user-session.update', $tag->id) }}">
                     @csrf
                     @method('PUT')
                     <button type="submit" class="btn">OFF</button>
-                  </form>
+                  </form> -->
                   <!-- <a class="btn" href="{{ route('user-session.update', $tag->id) }}">OFF</a> -->
                 </td>
 
