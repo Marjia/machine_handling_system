@@ -3,7 +3,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Invoices;
-
+use App\Models\Machines;
+use App\Models\TaggedUsersMachines;
+use App\Models\User;
+use App\Models\UserSessions;
 use Codedge\Fpdf\Fpdf\Fpdf ;
 
 class InvoicePDFController extends Controller {
@@ -43,15 +46,40 @@ class InvoicePDFController extends Controller {
     }
 
     public function createPDF(Request $request){
+
+      if($request->checkArr==NULL){
+        return back()->with('error','select to create invoice');
+      }
+      else {
+
+        $var=$request->checkArr;
+
+        $len= count($var);
+        $terminate=0;
+        $createInvoice=0;
+
+        // $invoices = Invoices::join('user_sessions','user_sessions.id','=','invoices.user_sessions_id')
+        //            ->select(['invoices.id','invoices.amount','invoices.invoices_no','invoices.user_sessions_id','user_sessions.start_time',
+        //            'user_sessions.end_time','user_sessions.tagged_users_machines_id',
+        //            'user_sessions.is_invoiced'])
+        //            ->findOrFail('invoices.id',$var)
+        //            // ->where('end_time',"!=",'NULL')
+        //            //->orderBy('user_sessions.tagged_users_machines_id','asc')
+        //            //->orderBy('users.name', 'asc')
+        //            ->get();
+
+        for ($j=0; $j < $len && $terminate == 0; $j++) {
+
+
+
+  
+
         $this->pdf = new Fpdf();
         // This Create New Pdf page
         $this->pdf->AddPage('P', 'A4', 0);
         $this->Header();
         $this->Footer();
         $this->pdf->AliasNbPages();
-
-
-
 
         //title cell
 
@@ -347,6 +375,7 @@ $varY = $var+10;
 
         $this->pdf->Output('invoice_file.php', 'I');
         exit;
+      }
     }
 
 }

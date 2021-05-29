@@ -1,8 +1,8 @@
-@extends('admin.dashboard')
-@section('usercontent')
+@extends('template.layout')
+@section('content')
 <div class="container">
     <div class="row">
-        <form class="col s12" method="POST" action="{{route('userPosts.update', ['userPost'=>$userPost->id])}}">
+        <form class="col s12" method="POST" action="{{route('user.update', $userPost->id)}}">
             @csrf
             @method('PUT')
 
@@ -86,12 +86,12 @@
                     <label style="padding-left: 6px">Admin</label>
                     <select name="is_admin">
                       <option  value="">Select</option>
-                      <option value="NO"  
+                      <option value="NO"
                           @php
                           // ddd(old('is_admin', $userPost->is_admin));
                           echo (old('is_admin', $userPost->is_admin) == 'NO') ? 'selected' : "";
                           @endphp>NO</option>
-                      <option value="YES"  
+                      <option value="YES"
                       @php
                       echo (old('is_admin', $userPost->is_admin) == 'YES') ? 'selected' : "";
                       @endphp>YES</option>
@@ -106,12 +106,12 @@
                     <label>Active</label>
                     <select name="is_active">
                       <option value="">Select</option>
-                      <option value="NO"  
+                      <option value="NO"
                           @php
                           // ddd(old('is_admin', $userPost->is_admin));
                           echo (old('is_active', $userPost->is_active) == 'NO') ? 'selected' : "";
                           @endphp>NO</option>
-                      <option value="YES"  
+                      <option value="YES"
                       @php
                       echo (old('is_active', $userPost->is_active) == 'YES') ? 'selected' : "";
                       @endphp>YES</option>
@@ -140,7 +140,3 @@
         });
     </script>
 @endsection
-
-
-
-

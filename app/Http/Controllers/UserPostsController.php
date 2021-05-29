@@ -83,7 +83,10 @@ class UserPostsController extends Controller
     {
         $userPost = User::findOrFail($id);
 
+      // dd($userPost);
         return view('admin.user.edit',['userPost'=>$userPost]);
+      //  return view('admin.user.edit',['userPost'=>$userPost]);
+      //  redirect(route('user.update', $userPost->id));
 
     }
 
@@ -130,7 +133,8 @@ class UserPostsController extends Controller
 
         $userPost->save();
 
-        return redirect('/user');
+        return redirect(route('user.show',$userPost->id));
+      //  return redirect('/user');
     }
 
 }

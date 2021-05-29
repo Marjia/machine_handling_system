@@ -22,60 +22,31 @@
           @csrf
 
         <tr>
-          <?php //dd(count($invoices))
-             // $terminate=0;
-             // $contVar=0;
-             // $skipVar=0;
-             $i=0;
-             // $sizeArray=count($invoices);
-          ?>
+          <div class="col s12">
+<!-- style="border: 5px solid red;float:left" -->
+              <?php if (Session::has('taggederror')): ?>
+                <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 20px;
+                  margin-bottom: 15px;
+                  font-size: 22px;">
+
+                    {{Session::get('taggederror')}}
+
+                </div>
+              <?php endif; ?>
+          </div>
+          <div class="col s12">
+<!-- style="border: 5px solid red;float:left" -->
+          <?php if (Session::has('error')): ?>
+            <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 20px;
+              margin-bottom: 15px;
+              font-size: 22px;">
+
+                {{Session::get('error')}}
+
+            </div>
+          <?php endif; ?>
+          </div>
            @forelse ($invoices as $invoice)
-           <?php
-              // $terminate = 0;
-              //   echo "<h>{{$invoice->name}}</h1>";
-              //   //$i =$contVar;
-              //   // while ($i < $sizeArray && $terminate == 0) {
-              //   //   echo $i;
-              //   //   //echo "{{$invoices[$i]->tagged_users_machines_id}}\n\n";
-              //   //   if($invoices[$i]->user_id!=$invoices[$i+1]->user_id)
-              //   //   {
-              //   //     $terminate = 1;
-              //   //   }
-              //   //   $i++;
-              //   //   //$contVar++;
-              //   // }
-              //
-              //   $skipVar = $contVar;
-              //  //dd($invoices[3]->user_id);
-              //   for ($i=$skipVar; $i <=$sizeArray && $terminate == 0 ; $i++) {
-              //
-              //     $checkId=$invoices[$i]->user_id;
-              //    echo "checkId------".$checkId;
-              //    //echo "user name------\n\n\n".$invoices[$i]->name."\n\n";
-              //    //echo "later user name------".$invoices[$i+1]->name;
-              //     echo "{{$machines->find($invoices[$i]->taggedUsersMachines()->first()->machine_id)->machine_no}}\n\n";
-              //     echo "{{$invoices[$i]->tagged_users_machines_id}}\n\n";
-              //
-              //    if($invoices[$i]->tagged_users_machines_id!=$invoices[$i+1]->tagged_users_machines_id)
-              //    {
-              //      //echo "terminate if\n\n";
-              //      $terminate = 1;
-              //      //$contVar=$i;
-              //     //echo "contvar----".$contVar;
-              //    }
-              //    //$terminate = 0;
-              //
-              //  }
-               //echo "loop end";
-
-               //echo "checkId==".$checkId;
-               //
-               // if($checkId==$invoices[$contVar+1]->user_id){
-               //  continue;
-               // }
-
-
-            ?>
             <td>
                 {{$invoice->name}}
             </td>
@@ -87,10 +58,6 @@
           <td>{{ $invoice->end_time }}</td>
           <td>{{ $invoice->is_invoiced }}</td>
           <td>
-            <?php
-             // if ($invoices[$i]->tagged_users_machines_id!=$invoices[$i+1]->tagged_users_machines_id)
-             //  {
-            ?>
             <p>
               <label>
                 <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}"/>
@@ -98,10 +65,6 @@
               </label>
             </p>
           </td>
-          <?php
-           // }
-           // $i++;
-           // ?>
         </tr>
 
         @empty
@@ -110,22 +73,23 @@
         <tr>
           <td>
             <div class="row">
-              <div class="input-field col s12">
+              <div class="input-field col s6">
+                <label>Invoice No.</label>
+                <input type="text" name="invoices_number" value="{{old('invoice_no')}}">
+                @error('invoices_number')
+                    <p>{{ $message }}</p>
+                @enderror
+              </div>
+              <div class="input-field col s6">
                 <label>Discount Rate</label>
                 <input type="number" name="discount" value="discount">
               </div>
                 <div class="col s12">
  <!-- style="border: 5px solid red;float:left" -->
                     <button type="submit" class="btn">Create Invoice</button>
-                    <?php if (Session::has('error')): ?>
-                      <div class="alert alert-danger">
 
-
-                          {{Session::get('error')}}
-
-                      </div>
-                    <?php endif; ?>
                 </div>
+
             </div>
           </td>
 

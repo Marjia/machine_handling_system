@@ -20,37 +20,25 @@ class IsInvoiceController extends Controller
     {
 
       $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 //->join('invoices','user_sessions_id','=','user_sessions.id')
-                 ->select(['users.name','user_sessions.user_id','user_sessions.id',
-                 'user_sessions.start_time',
+                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time',
                  'user_sessions.end_time','user_sessions.tagged_users_machines_id',
-                 'user_sessions.is_invoiced'])//,'invoices.amount','invoices.discount',
-                // 'invoices.final_amount','invoices.tax_amount'])
+                 'user_sessions.is_invoiced'])
                  ->where('is_invoiced','NO')
                  // ->where('end_time',"!=",'NULL')
+                 //->orderBy('user_sessions.tagged_users_machines_id','asc')
                  ->orderBy('users.name', 'asc')
-                 ->orderBy('user_sessions.tagged_users_machines_id','asc')
                  ->get();
 
     // dd($invoices);
-    //
+
     // $arrayOfTaggedId = [];
     //
     // foreach ($invoices as $taggedId) {
-    //   //echo $taggedId->user_id."\n\n".$taggedId->tagged_users_machines_id."\n\n";
-    //   if (isset($arrayOfTaggedId[$taggedId->user_id])) {
-    //     $i = count($arrayOfTaggedId[$taggedId->user_id]);
-    //   } else{
-    //     $i = 0;
-    //   }
-    //   $arrayOfTaggedId[$taggedId->user_id][$i] = $taggedId->tagged_users_machines_id;
-    //
-    // // else {
-    //   //array_push( $taggedId->tagged_users_machines_id, $arrayOfTaggedId[$taggedId->user_id][i]);
-    // // }
+    //   echo $taggedId->user_id."\n\n".$taggedId->tagged_users_machines_id;
+    //   array_push($taggedId->tagged_users_machines_id, $arrayOfTaggedId[$taggedId->user_id]);
     // }
     //
-    //  dd($arrayOfTaggedId);
+    // print_r($arrayOfTaggedId);
     // dd();
 
 
@@ -58,8 +46,6 @@ class IsInvoiceController extends Controller
 
         return view('admin.invoices.index', ['invoices'=> $invoices,
         'machines'=>Machines::all()]);
-
-        //'arrayOfTaggedId'=>$arrayOfTaggedId
     }
 
     /**
@@ -86,17 +72,13 @@ class IsInvoiceController extends Controller
     public function store(Request $request)
     {
 
-       //dd($request->checkArr);
+       // dd($request->discount);
 
-       //dd
-
-       if($request->discount == NULL)
-       {
-         $discount = 0;
-       }
-       else {
-         $discount = $request->discount;
-       }
+       // $request->validate([
+       //
+       //    'invoices_number' => 'required|unique:invoices,invoices_no,'
+       //
+       // ]);
 
       if($request->checkArr==NULL){
         return back()->with('error','select to create invoice');
@@ -106,52 +88,85 @@ class IsInvoiceController extends Controller
 
                 $var=$request->checkArr;
                 $len= count($var);
-                //dd($len);
-                echo $len."\n\n\n";
+                $terminate=0;
+                $createInvoice=0;
+
+                for ($j=0; $j < $len && $terminate == 0; $j++) {
                   $userSession = UserSessions::findOrFail($var);
-                  arrSrt[]=sort($userSession->tagged_users_machines_id);
+                  if($j+1!=$len)
+                  {
+                    if ($userSession[$j]->tagged_users_machines_id==$userSession[$j+1]->tagged_users_machines_id) {
+                      //echo "same";
+                     $terminate==0;
+                    }
+                    else {
 
-        for ($i=0; $i < $len ; $i++) {
-               //asort($userSession[$i]->tagged_users_machines_id);
+                      return back()->with('taggederror','select same tagged Id');
+                      $terminate=1;
+                      $createInvoice=1;
+                    }
+                  }
 
-                 echo $userSession[$i]->tagged_users_machines_id;
-                 //echo $var[$i]."\n\n\n";
-                  // $userSession = UserSessions::findOrFail($var);
-                  //
-                  // if($i!=$len-1){
-                  //   if ($userSession[$i]->tagged_users_machines_id==$userSession[$i+1]->tagged_users_machines_id) {
-                  //     echo "same\n\n\n\n";
-                  //   }
-                  //   else {
-                  //     echo "different\n\n\n\n";
-                  //   }
-                  // }
-                  //
-                  //  echo "tagged\n\n\n\n".$userSession[$i]->tagged_users_machines_id;
-                 //
-                  //
-                  // $percent = ($discount * $userSession-> session_rate) / 100;
-                  // $total = $userSession->session_rate - $percent;
-                  // //dd($total);
-                  // $invoice = new Invoices();
-                  //
-                  // $invoice->invoices_no = $userSession->id;
-                  // $invoice->user_sessions_id = $userSession->id;
-                  // $invoice->from_date  = $userSession-> start_time;
-                  // $invoice->to_date   = $userSession-> end_time;
-                  // $invoice->discount = $discount;
-                  // $invoice->amount   = $userSession->session_rate;
-                  // $invoice->final_amount   = $total;
-                  // $invoice->tax_amount = 20;
-                  // $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
-                  // $invoice->is_active = "YES";
-                  // $invoice->save();
-                  //
-                  //
-                  // $userSession->is_invoiced ="YES";
-                  // $userSession->save();
-        }
-       //return redirect('/invoice');
+                }
+                echo $createInvoice;
+                if($request->discount == NULL)
+                {
+                  $discount = 0;
+                }
+                else {
+                  $discount = $request->discount;
+                }
+              for ($i=0; $i < $len && $createInvoice == 0; $i++) {
+
+                       //echo $var[$i];
+                      $userSession = UserSessions::findOrFail($var[$i]);
+
+                         //echo $userSession;
+                       //
+
+                        $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+                        $total = $userSession-> session_rate - $percent;
+                        //dd($total);
+                        $invoice = new Invoices();
+
+                        $invoice->invoices_no = $userSession->id;
+                        $invoice->user_sessions_id = $userSession->id;
+                        $invoice->from_date  = $userSession-> start_time;
+                        $invoice->to_date   = $userSession-> end_time;
+                        $invoice->discount = $discount;
+                        $invoice->amount   = $userSession->session_rate;
+                        $invoice->final_amount   = $total;
+                        $invoice->tax_amount = 20;
+                        $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+                        $invoice->is_active = "YES";
+                        $invoice->save();
+
+
+                        $userSession->is_invoiced ="YES";
+                        $userSession->save();
+              }
+
+              // $invoice = new Invoices();
+              //
+              // if($request->discount == NULL)
+              // {
+              //   $invoice->discount = 0;
+              // }
+              // else{
+              //   $invoice->discount = $request->discount;
+              // }
+              // $invoice->invoices_no=$user_session_id;
+              // $invoice->user_sessions_id = $user_session_id;
+              // $invoice->amount = $amount;
+              // $invoice->tax_amount = 20;
+              // $invoice->final_amount = $total;
+              // $invoice->total_payable_amount = $total_payable_amount;
+              // $invoice->from_date  = $start_time;
+              // $invoice->to_date   = $end_time;
+              // $invoice->is_active = "YES";
+              // $invoice->save();
+
+          return redirect('/invoice');
      }
         //dd($len);
     }
@@ -164,7 +179,16 @@ class IsInvoiceController extends Controller
      */
     public function show()
     {
-        return view('admin.invoices.show',['invoices'=> Invoices::all()]);
+      $invoices = Invoices::join('user_sessions','user_sessions.id','=','invoices.user_sessions_id')
+                 ->select(['invoices.id','invoices.amount','invoices.invoices_no','invoices.user_sessions_id','user_sessions.start_time',
+                 'user_sessions.end_time','user_sessions.tagged_users_machines_id',
+                 'user_sessions.is_invoiced'])
+                 //->where('is_invoiced','NO')
+                 // ->where('end_time',"!=",'NULL')
+                 ->orderBy('user_sessions.tagged_users_machines_id','asc')
+                 //->orderBy('users.name', 'asc')
+                 ->get();
+        return view('admin.invoices.show',['invoices'=> $invoices]);
     }
 
     /**

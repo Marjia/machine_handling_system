@@ -16,6 +16,7 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('invoices_no')->unique();
+            //$table->string('invoices_no');
             $table->foreignId('user_sessions_id')->nullable()->constrained('user_sessions');
             $table->dateTime('from_date');
             $table->dateTime('to_date');
