@@ -25,12 +25,16 @@
                   <td>{{$machine->created_at }}</td>
                 </tr>
                 <tr>
+                  <th>Modified at: </th>
+                  <td>{{$machine->updated_at }}</td>
+                </tr>
+                <tr>
                   <th>Tagged: </th>
                   <td>{{$machine->is_tagged }}</td>
                 </tr>
                 <tr>
                   <th>Tagged User: </th>
-                  
+                 <td>{{$tag->name}}</td>
                 </tr>
             </tbody>
           </table>

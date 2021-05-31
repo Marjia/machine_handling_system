@@ -1,6 +1,10 @@
 @extends('template.layout')
 @section('content')
     <div class="container">
+     @guest
+      @include('auth.login')
+     @endguest
+      @auth
         <div class="row" style="padding-top: 50px">
             <div class="col s4">
                 <div class="card-panel blue darken-4">
@@ -59,6 +63,7 @@
                 </div>
             </div>
         </div>
+      @endauth
     </div>
 
 @endsection

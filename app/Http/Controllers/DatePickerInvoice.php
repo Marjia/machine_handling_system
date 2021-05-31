@@ -16,21 +16,21 @@ class DatePickerInvoice extends Controller
      *
      * @return \Illuminate\Http\Response
   */
-    // public function index()
-    // {
-    //   $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-    //              ->select(['users.name','user_sessions.id','user_sessions.start_time','user_sessions.end_time','user_sessions.tagged_users_machines_id',
-    //              'user_sessions.is_invoiced'])
-    //              ->where('is_invoiced','NO')
-    //              // ->where('end_time',"!=",'NULL')
-    //              ->orderBy('users.name', 'asc')
-    //              ->get();
-    //
-    // //  dd($invoices);
-    //
-    //     return view('admin.invoices.index', ['invoices'=> $invoices,
-    //     'machines'=>Machines::all()]);
-    // }
+    public function index()
+    {
+      $invoicesDatepicker = UserSessions::join('users','users.id','=','user_sessions.user_id')
+                 ->select(['users.name','user_sessions.id','user_sessions.start_time','user_sessions.end_time','user_sessions.tagged_users_machines_id',
+                 'user_sessions.is_invoiced'])
+                 ->where('is_invoiced','NO')
+                 // ->where('end_time',"!=",'NULL')
+                 ->orderBy('users.name', 'asc')
+                 ->get();
+
+    //  dd($invoices);
+
+        return view('admin.invoices.index', ['invoices'=> $invoicesDatepicker,
+        'machines'=>Machines::all()]);
+    }
     //
     // /**
     //  * Show the form for creating a new resource.
