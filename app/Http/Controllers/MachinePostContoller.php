@@ -69,9 +69,9 @@ class MachinePostContoller extends Controller
         $tag = TaggedUsersMachines::where('machine_id',$id)
                     ->join('users','users.id','=','tagged_users_machines.user_id')
                     ->select('users.name','tagged_users_machines.tagged_by','tagged_users_machines.tagged_at',)
-                    ->get();
+                    ->first();
         //$tag = TaggedUsersMachines::findOrFail($id);
-       return $tag;
+       //sreturn $tag->name;
 
         return view('admin.machine.show',['machine'=> $machine,'users'=>$user,'tag'=>$tag]);
     }
