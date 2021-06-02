@@ -5,6 +5,47 @@
 <div class="container">
     <div class="row">
 
+      <form method="POST"  action="{{ route('user-session.store' )}}" class="col s12">
+         @csrf
+      <div class="row" style="padding-top: 30px">
+          <div class="input-field col s6">
+              <select name="user" id="user_id">
+
+                  <option value="" disabled selected>Select</option>
+                @foreach ($users as $user)
+                  <option value="{{ $user->id }}">{{ $user->name }}</option>
+                @endforeach
+
+              </select>
+              <label>User Name</label>
+              @error('name')
+                  <p>{{ $message }}</p>
+              @enderror
+          </div>
+
+          <div class="input-field col s6">
+              <select name="machine_no" id="machine_id">
+                <option value="" disabled selected>Select</option>
+
+                @foreach ($machines as $machine)
+                  <option value="{{ $machine->id }}">{{ $machine->machine_no }}</option>
+                @endforeach
+
+              </select>
+              <label>Machine No.</label>
+              @error('machine_no')
+                  <p>{{ $message }}</p>
+              @enderror
+          </div>
+      </div>
+      <div>
+        <button type="submit" class="btn">start</button>
+      </div>
+
+    </form>
+
+
+<!--
         <table>
             <thead>
               <tr>
@@ -15,79 +56,58 @@
               </tr>
             </thead>
             <tbody>
-              @forelse ($taggedMachines as $tag)
-              <tr>
-                @foreach ($users as $user)
-                  @php
-                      if($tag->user_id == $user->id)
-                      {
-                          echo"
-                          <td>
-                                 $user->name
-                          </td>
-                          ";
-                      }
-                  @endphp
+               <tr>
+                     <td>
+                         <form method="POST"  action="{{ route('user-session.store' )}}" class="col s12">
+                            @csrf
+                           <select name="user" id="user_id">
+                               <option value="" disabled selected>Select</option>
 
-                @endforeach
+                             @foreach ($users as $user)
+                               <option value="{{ $user->id }}">{{ $user->name }}</option>
+                             @endforeach
 
-                @foreach ($machines as $machine)
-                  @php
-                      if($tag->machine_id == $machine->id)
-                      {
-                          echo"
-                          <td>
-                                 $machine->machine_no
-                          </td>
-                          ";
-                      }
-                  @endphp
+                           </select>
 
-                @endforeach
-                <td>
-                  <a class="btn" href="{{ route('user-session.edit', $tag->id) }}">Start</a>
-                  <!-- <div class="switch" id='switchId'>
-                     <label>
-                       Off
-                       <input type="checkbox" id= "@php $tag->id;@endphp" name="switchName">
-                       <span class="lever"></span>
-                       Start
-                     </label>
-                   </div> -->
-                </td>
-                <td>
-                  <!-- <form  method="post"  action="{{ route('user-session.update', $tag->id) }}">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" class="btn">OFF</button>
-                  </form> -->
-                  <!-- <a class="btn" href="{{ route('user-session.update', $tag->id) }}">OFF</a> -->
-                </td>
+                           @error('name')
+                               <p>{{ $message }}</p>
+                           @enderror
+                         </td>
+                       </tr>
+                       <tr>
+                       <td>
+                           <div class="input-field col s6">
+                           <select name="machine_no" id="machine_id">
+                             <option value="" disabled selected>Select</option>
 
-              </tr>
-              @empty
-                <tr><td>No machine tagged!!</td></tr>
-              @endforelse
+                             @foreach ($machines as $machine)
+                               <option value="{{ $machine->id }}">{{ $machine->machine_no }}</option>
+                             @endforeach
+
+                           </select>
+                           <label>Machine No.</label>
+                           @error('machine_no')
+                               <p>{{ $message }}</p>
+                           @enderror
+                       </div>
+                     </td>
+                    </tr>
+                   <tr>
+                    <td><button type="submit" class="btn">start</button></td>
+                  </tr>
+                </form>
             </tbody>
-          </table>
+          </table> -->
+
+
     </div>
 </div>
 @endsection
-<!-- @section('customJs')
+@section('customJs')
     <script>
-        var switcDiv = document.getElementsByName('switchName');
-
-        switcDiv.forEach((item) => {
-          item.addEventListener('change', function(){
-            //console.log(item.id, item.checked);
-            sessionStart(item.id, item.checked);
-          });
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
         });
-
-        function sessionStart(m_id, is_started){
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', 'user-session/'+m_id+'/edit?start=' + is_started, true);
-          xhr.send();
-        }
     </script>
-@endsection -->
+@endsection

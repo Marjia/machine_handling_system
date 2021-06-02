@@ -33,6 +33,10 @@
                   <td>{{$machine->is_tagged }}</td>
                 </tr>
                 <tr>
+                  <th>Tagged By: </th>
+                  <td>{{$users->find($users->taggedUsersMachines()->first()->tagged_by)->name}}</td>
+                </tr>
+                <tr>
                   <th>Tagged User: </th>
                  <td>{{$tag->name}}</td>
                 </tr>

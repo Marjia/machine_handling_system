@@ -79,13 +79,6 @@
            <td>
              <div class="row">
                <div class="input-field col s6">
-                 <label>Invoice No.</label>
-                 <input type="text" name="invoices_number" value="{{old('invoice_no')}}">
-                 @error('invoices_number')
-                     <p>{{ $message }}</p>
-                 @enderror
-               </div>
-               <div class="input-field col s6">
                  <label>Discount Rate</label>
                  <input type="number" name="discount" value="discount">
                </div>

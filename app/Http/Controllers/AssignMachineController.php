@@ -35,8 +35,8 @@ class AssignMachineController extends Controller
 
        $taggedMachine = new TaggedUsersMachines();
 
-       $taggedMachine-> user_id = $request->input('user');
-       $taggedMachine-> machine_id=$request->input('machine_no');
+       $taggedMachine->user_id = $request->input('user');
+       $taggedMachine->machine_id=$request->input('machine_no');
        $taggedMachine->hourly_session_charge=$request->input('hourly_session_charge');
        $taggedMachine->tagged_at=$request->input('tagged_at');
        $taggedMachine->is_active="YES";

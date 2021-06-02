@@ -68,11 +68,11 @@ class InvoicePDFController extends Controller {
         //            //->orderBy('users.name', 'asc')
         //            ->get();
 
-        for ($j=0; $j < $len && $terminate == 0; $j++) {
+    //    for ($j=0; $j < $len && $terminate == 0; $j++) {
 
 
 
-  
+
 
         $this->pdf = new Fpdf();
         // This Create New Pdf page
@@ -375,7 +375,8 @@ $varY = $var+10;
 
         $this->pdf->Output('invoice_file.php', 'I');
         exit;
-      }
+      //}
     }
 
+}
 }

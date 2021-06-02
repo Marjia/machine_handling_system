@@ -16,7 +16,7 @@
                       @endforeach
 
                     </select>
-                    <label>User Name</label>
+              User Name      <label>User Name</label>
                     @error('name')
                         <p>{{ $message }}</p>
                     @enderror
@@ -32,7 +32,7 @@
 
                     </select>
                     <label>Machine No.</label>
-                    @error('machine_no')
+              User Name      @error('machine_no')
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
@@ -54,7 +54,7 @@
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
-            </div> --}}
+            </dUser Nameiv> --}}
             <!-- <div class="input-field col s12">
                 <select name="is_active">
                   <option value="" disabled selected>Select</option>

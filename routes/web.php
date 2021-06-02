@@ -34,6 +34,7 @@ Route::get('/tagged-machine', [DetagMachineController::class,'create'])->name('d
 Route::get(
     '/detag-machine/{id}/detag', [DetagMachineController::class, 'edit']
     )->name('delete-detag');
+//Route::resource('edit-session-rate',EditTaggedSessionRate::class)->only('edit','update');
 
 Route::resource('user', UserPostsController::class)->except(['destroy']);
 Route::get('user/{id}/delete',[UserDeactivationController::class, 'edit'])->name('user-delete');
@@ -43,6 +44,6 @@ Route::resource('date-invoice',DatePickerInvoice::class)->only(['store']);
 Route::get('generate-invoice/{id}',[GenerateInvoicePdfController::class,'invoices'])->name('generate-invoices');
 Route::get('/pdf', [InvoicePDFController::class, 'createPDF'])->name('create-pdf');
 
-Route::resource('user-session',UserSessionController::class)->only(['index','edit','update']);
+Route::resource('user-session',UserSessionController::class)->only(['index','edit','update','store']);
 
 Route::get('/profile',[ProfileController::class,'profileController'])->name('profile');

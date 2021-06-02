@@ -47,15 +47,7 @@
                 @endforeach
                 <td>{{ $tag->is_active }}</td>
                 <td><a class="btn" href="{{ route('delete-detag', $tag->id) }}">Detag</a></td>
-
-                {{-- <form method="POST" action="{{route('deactivate-detag', $tag->id)}}">
-                    @csrf
-                    @method('PUT')
-
-                    <td>
-                        <input type="submit" value="Delete" class="btn">
-                    </td>
-                </form> --}}
+                <td><a class="btn" href="#">Edit Session Rate</a></td>
               </tr>
               @empty
                 <tr><td>No machine tagged!!</td></tr>

@@ -33,18 +33,56 @@ class UserSessionController extends Controller
     // {
     //     //
     // }
-    //
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-    //
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+       $user = $request->user;
+     //dd($user);
+          $input = TaggedUsersMachines::where('user_id',$user)
+                                        ->where('machine_id',$request->machine_no)
+                                         ->where('is_active',"YES")
+                                         ->first();
+
+         if($input == NULL)
+         {
+           echo "machine is not tagged with";
+         }
+         else {
+           echo "ghuma";
+
+               $start_time=Carbon::now();
+               $userSession = new UserSessions();
+
+               $userId = $input->user_id;
+
+               $userSession->user_id=$userId;
+               $userSession->tagged_users_machines_id=$input->id;
+               $userSession->session_rate = $input->hourly_session_charge;
+               $userSession->logged_at=Carbon::now();
+               $userSession->start_time=$start_time;
+               if($userId %2 != 0){
+               $userSession->end_time=Carbon::now()->addDay();}
+               else {
+                 $userSession->end_time=Carbon::now()->addDay(2);
+               }
+               $userSession->save();
+
+           //     //return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
+           //     return redirect('/user-session');
+
+         }
+
+
+        //dd($input);
+    }
+
     // /**
     //  * Display the specified resource.
     //  *
@@ -62,33 +100,36 @@ class UserSessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
-    {
-      $var = $request->all();
-      $user = 0;
-
-      $input = TaggedUsersMachines::findOrFail($id);
-        $start_time=Carbon::now();
-        $userSession = new UserSessions();
-
-        $userId = $input->user_id;
-
-        $userSession->user_id=$userId;
-        $userSession->tagged_users_machines_id=$input->id;
-        $userSession->session_rate = $input->hourly_session_charge;
-        $userSession->logged_at=Carbon::now();
-        $userSession->start_time=$start_time;
-        if($userId%2 != 0){
-        $userSession->end_time=Carbon::now()->addDay();}
-        else {
-          $userSession->end_time=Carbon::now()->addDay(2);
-        }
-        $userSession->save();
-
-        //return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
-        return redirect('/user-session');
-
-    }
+    // public function edit(Request $request)
+    // {
+    //   //$var = $request->all();
+    //   // $user = 0;
+    //   // dd($request);
+    //   $input = TaggedUsersMachines::findOrFail($id)
+    //                                ->where('user_id',)
+    //                                ->where('machine_id',)
+    //                                ->where('is_active','YES');
+    //     $start_time=Carbon::now();
+    //     $userSession = new UserSessions();
+    //
+    //     $userId = $input->user_id;
+    //
+    //     $userSession->user_id=$userId;
+    //     $userSession->tagged_users_machines_id=$input->id;
+    //     $userSession->session_rate = $input->hourly_session_charge;
+    //     $userSession->logged_at=Carbon::now();
+    //     $userSession->start_time=$start_time;
+    //     if($userId %2 != 0){
+    //     $userSession->end_time=Carbon::now()->addDay();}
+    //     else {
+    //       $userSession->end_time=Carbon::now()->addDay(2);
+    //     }
+    //     $userSession->save();
+    //
+    //     //return view('admin.userSession.sessionEnd',['userSession'=>$userSession]);
+    //     return redirect('/user-session');
+    //
+    // }
 
     /**
      * Update the specified resource in storage.

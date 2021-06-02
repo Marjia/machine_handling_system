@@ -37,7 +37,7 @@
             <div class="col s4">
                 <div class="card-panel yellow darken-4">
                     <div class="card-action">
-                        <a class="white-text" href="{{route('assign-machine')}}">Tag Machine</a>
+                        <a class="white-text" href="{{route('assign-machine')}}">Tag Machine User</a>
                     </div>
                 </div>
             </div>
