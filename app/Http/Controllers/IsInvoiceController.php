@@ -72,24 +72,55 @@ class IsInvoiceController extends Controller
     public function store(Request $request)
     {
 
-       //dd($request->checkArr);
+
         $var=$request->checkArr;
-        $len= count($var);
+        //$len= count($var);
 
-        $userSession = UserSessions::findOrFail($var)->groupBy('user_id');
-        //dd($userSession);
-        // $result = array_unique($userSession->user_id->toArray());
-        dd($result);
-        for ($i=0; $i <$len ; $i++) {
-          $userSession = UserSessions::findOrFail($var[$i]);
+        $userSessions = UserSessions::findOrFail($var)->groupBy('tagged_users_machines_id');
+
+          $invoi=234;
+        foreach ($userSessions as $res=>$resu) {
+
+           $userSession = $resu->first();
+           $invoi++;
+           $invoiceNumber = "022".$invoi;
+
+            //echo "invoice number".$invoiceNumber."\n\n\n\n";
+           // echo "userId==\n\n\n".$tr->user_id."\n\n\n";
+            foreach ($resu as $v) {
+              $invoi= $invoi + 0;
 
 
-          $invoiceNum = 0234;
+              $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+              $total = $userSession->session_rate - $percent;
+              //dd($total);
+              $invoice = new Invoices();
 
-          $set=$userSession->user_id;
-          echo $set;
+              $invoice->invoices_no = $invoiceNumber;
+              $invoice->user_sessions_id = $userSession->id;
+              $invoice->from_date  = $userSession-> start_time;
+              $invoice->to_date   = $userSession-> end_time;
+              $invoice->discount = 10;
+              $invoice->amount   = $userSession->session_rate;
+              $invoice->final_amount   = $total;
+              $invoice->tax_amount = 20;
+              $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+              $invoice->is_active = "YES";
+              $invoice->save();
+
+
+              $userSession->is_invoiced ="YES";
+              $userSession->save();
+
+           //echo "nextuserId==\n\n\n".$tr->user_id."\n\n\n";
+
+                //echo $invoiceNumber;
+            }
+
+
+
         }
-
+        //dd($nelen);
 
 
        // $request->validate([
