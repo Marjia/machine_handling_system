@@ -8,6 +8,7 @@ use App\Models\TaggedUsersMachines;
 use App\Models\User;
 use App\Models\UserSessions;
 use Codedge\Fpdf\Fpdf\Fpdf ;
+use Carbon\Carbon;
 
 class InvoicePDFController extends Controller {
     private $pdf;
@@ -45,29 +46,55 @@ class InvoicePDFController extends Controller {
 
     }
 
-    public function createPDF(Request $request){
+    public function createPDF($id){
 
-      if($request->checkArr==NULL){
-        return back()->with('error','select to create invoice');
-      }
-      else {
+    $invoiceInput = Invoices::findOrFail($id);
+    $invoices = Invoices::where('invoices_no',$invoiceInput->invoices_no)->get();
+    $len = count($invoices);
+  //  dd($invoices);
 
-        $var=$request->checkArr;
+      // if($request->checkArr==NULL){
+      //   return back()->with('error','select to create invoice');
+      // }
+      // else {
 
-        $len= count($var);
-        $terminate=0;
-        $createInvoice=0;
 
-        // $invoices = Invoices::join('user_sessions','user_sessions.id','=','invoices.user_sessions_id')
+        //$invoice = Invoices::findOrFail($var)->first();
+        //dd($invoice);
+       $startDateTimeStr = $invoices[0]->from_date;
+       $start_time = Carbon::parse($startDateTimeStr)->format('Y-m-d');
+
+       $endDateTimeStr = $invoices[$len-1]->to_date;
+      $end_time = Carbon::parse($endDateTimeStr)->format('Y-m-d');
+
+      $created_time = $invoices[0]->created_at;
+      $created = Carbon::parse($created_time)->format('Y-m-d');
+
+      $lastDateStr = $invoices[$len-1]->created_at;
+      $lastDate = Carbon::parse($lastDateStr)->addDay(5)->format('Y-m-d');
+
+      // dd($lastDate);
+
+        // $invoices = Invoices::where('id',$var)
+        //            ->join('user_sessions','user_sessions.id','=','invoices.user_sessions_id')
         //            ->select(['invoices.id','invoices.amount','invoices.invoices_no','invoices.user_sessions_id','user_sessions.start_time',
         //            'user_sessions.end_time','user_sessions.tagged_users_machines_id',
         //            'user_sessions.is_invoiced'])
-        //            ->findOrFail('invoices.id',$var)
+        //            ->get();
         //            // ->where('end_time',"!=",'NULL')
         //            //->orderBy('user_sessions.tagged_users_machines_id','asc')
         //            //->orderBy('users.name', 'asc')
-        //            ->get();
+        //            //->get();
+        // dd($invoices);
 
+        $userSession = UserSessions::findOrFail($invoiceInput->user_sessions_id);
+//dd($userSession);
+        $user = User::findOrFail($userSession->user_id);
+//dd($user->name);
+        $taggedUser = TaggedUsersMachines::findOrFail($userSession->tagged_users_machines_id);
+
+        $machine = Machines::findOrFail($taggedUser->machine_id);
+//dd($machine);
     //    for ($j=0; $j < $len && $terminate == 0; $j++) {
 
 
@@ -94,14 +121,14 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetX(118);
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(32,5,'Invoice No',1,0,'L');
-        $this->pdf->Cell(45,5,'0222',1,0,'L');
+        $this->pdf->Cell(45,5,$invoiceInput->invoices_no,1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY(45);
         $this->pdf->SetX(118);
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(32,10,'Billing Period','LRTB','L',false);
-        $this->pdf->MultiCell(45,5,'2021-05-02 07:46:26 to 2021-05-06 13:09:07','LRTB','L',false);
+        $this->pdf->MultiCell(45,10,$start_time.' to '.$end_time,'LRTB','L',false);
         $this->pdf->Ln(0);
 
         $this->pdf->SetY(55);
@@ -109,14 +136,14 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(32,5,'Invoice Generated',1,0,'L');
         //$this->pdf->SetFillColor(255,255,255);
-        $this->pdf->MultiCell(45,5,'12/3/2021','LRTB','L',false);
+        $this->pdf->MultiCell(45,5,$created,'LRTB','L',false);
         $this->pdf->Ln(0);
 
         $this->pdf->SetY(60);
         $this->pdf->SetX(118);
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(32,5,'Due date',1,0,'L');
-        $this->pdf->Cell(45,5,'12/4/2021',1,0,'L');
+        $this->pdf->Cell(45,5,$lastDate,1,0,'L');
 
        //Billed to information
 
@@ -129,7 +156,7 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetY(51);
         $this->pdf->SetX(14);
         $this->pdf->SetFont('Arial','',11);
-        $this->pdf->Cell(80,8,'Marco Orishini',0,0,'L');
+        $this->pdf->Cell(80,8,$user->name,0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY(56);
@@ -141,7 +168,7 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetY(61);
         $this->pdf->SetX(14);
         $this->pdf->SetFont('Arial','',11);
-        $this->pdf->Cell(80,8,'example@gmail.com www.examplesite.com',0,0,'L');
+        $this->pdf->Cell(80,8,$user->email.'  www.examplesite.com',0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY(66);
@@ -151,7 +178,9 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetY(67);
         $this->pdf->SetX(32);
         $this->pdf->SetFont('Arial','',10);
-        $this->pdf->MultiCell(75,6,'Mirpur DOHS, 11 Avenue-11 House #1188, Flat #A1',0,'L',false);
+        $this->pdf->MultiCell(75,6,$user->address,0,'L',false);
+
+      //  'Mirpur DOHS, 11 Avenue-11 House #1188, Flat #A1'
 
         $this->pdf->Ln(0);
         $this->pdf->SetY(78);
@@ -168,7 +197,7 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(45,6,'Machine No',1,0,'L');
         $this->pdf->SetFont('Arial','',10);
-        $this->pdf->Cell(32,6,'M-12',1,0,'L');
+        $this->pdf->Cell(32,6,$machine->machine_no,1,0,'L');
 
         $this->pdf->Ln(0);
 
@@ -177,7 +206,7 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(45,6,'Expense Per session',1,0,'L');
         $this->pdf->SetFont('Arial','',10);
-        $this->pdf->Cell(32,6,'123.00',1,0,'L');
+        $this->pdf->Cell(32,6,$taggedUser->hourly_session_charge,1,0,'L');
         $this->pdf->Ln(0);
 
         //invoice table
@@ -189,44 +218,57 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,8,'Session ID',1,0,'C',true);
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(30,8,'Base(AED)',1,0,'C',true);
+        $this->pdf->Cell(30,8,'Base',1,0,'C',true);
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,8,'Discount %',1,0,'C',true);
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(30,8,'Taxable(AED)',1,0,'C',true);
+        $this->pdf->Cell(30,8,'Taxable',1,0,'C',true);
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,8,'5% Tax',1,0,'C',true);
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(30,8,'Payable (AED)',1,0,'C',true);
+        $this->pdf->Cell(30,8,'Payable ',1,0,'C',true);
 //
 // // loop code
 //
 // // dd($request->checkArr);
-// //   $arrayVar = $request->checkArr;
-// //   $len = count($arrayVar);
+  // $arrayVar = $request->checkArr;
+  // $len = count($arrayVar);
    $var = 99;
- for ($i=0; $i <100 ; $i++) {
+
+   $grandAmount = 0;
+   $grandDiscount = 0;
+   $grandTaxable = 0;
+   $grandPercentTax = 0;
+   $grandPayable = 0;
+ for ($i=0; $i <$len ; $i++) {
 //30
 
-   //$invoice = Invoices::findOrFail(3);
+   //$invoice = Invoices::findOrFail($arrayVar[$i]);
 
-  //echo $invoice
+  //echo $invoice;
 
-   // $this->pdf->Ln(0);
-   // $this->pdf->SetY($var);
-   // $this->pdf->SetX(14);
-   // $this->pdf->SetFont('Arial','',11);
-   // $this->pdf->Cell(30,5,$invoice->invoices_no,1,0,'C');
-   // $this->pdf->SetFont('Arial','',11);
-   // $this->pdf->Cell(30,5,$invoice->amount,1,0,'C');
-   // $this->pdf->SetFont('Arial','',11);
-   // $this->pdf->Cell(30,5,$invoice->discount,1,0,'C');
-   // $this->pdf->SetFont('Arial','',11);
-   // $this->pdf->Cell(30,5,$invoice->tax_amount,1,0,'C');
-   // $this->pdf->SetFont('Arial','',11);
-   // $this->pdf->Cell(30,5,'5% ',1,0,'C');
-   // $this->pdf->SetFont('Arial','',11);
-   // $this->pdf->Cell(30,5,$invoice->total_payable_amount,1,0,'C');
+   $this->pdf->Ln(0);
+   $this->pdf->SetY($var);
+   $this->pdf->SetX(14);
+   $this->pdf->SetFont('Arial','',11);
+   $this->pdf->Cell(30,5,$invoices[$i]->user_sessions_id,1,0,'C');
+   $this->pdf->SetFont('Arial','',11);
+   $this->pdf->Cell(30,5,$invoices[$i]->amount,1,0,'C');
+   $this->pdf->SetFont('Arial','',11);
+   $this->pdf->Cell(30,5,$invoices[$i]->discount.'%',1,0,'C');
+   $this->pdf->SetFont('Arial','',11);
+   $this->pdf->Cell(30,5,$invoices[$i]->tax_amount,1,0,'C');
+   $this->pdf->SetFont('Arial','',11);
+   $this->pdf->Cell(30,5,'5% ',1,0,'C');
+   $this->pdf->SetFont('Arial','',11);
+   $this->pdf->Cell(30,5,$invoices[$i]->total_payable_amount,1,0,'C');
+
+
+   $grandAmount = $invoices[$i]->amount + $grandAmount;
+   $grandDiscount = $invoices[$i]->discount + $grandDiscount;
+   $grandTaxable = $invoices[$i]->tax_amount + $grandTaxable;
+   $grandPercentTax = 5 + $grandPercentTax;
+   $grandPayable = $invoices[$i]->total_payable_amount + $grandPayable;
 
 //   $varTest=104.00;
 //
@@ -234,21 +276,21 @@ class InvoicePDFController extends Controller {
 //dd($varStr);
 
 
-   $this->pdf->Ln(0);
-   $this->pdf->SetY($var);
-   $this->pdf->SetX(14);
-   $this->pdf->SetFont('Arial','',11);
-   $this->pdf->Cell(30,5,23,1,0,'C');
-   $this->pdf->SetFont('Arial','',11);
-   $this->pdf->Cell(30,5,'111.00',1,0,'C');
-   $this->pdf->SetFont('Arial','',11);
-   $this->pdf->Cell(30,5,'6.00',1,0,'C');
-   $this->pdf->SetFont('Arial','',11);
-   $this->pdf->Cell(30,5,'104.34',1,0,'C');
-   $this->pdf->SetFont('Arial','',11);
-   $this->pdf->Cell(30,5,'5.22 ',1,0,'C');
-   $this->pdf->SetFont('Arial','',11);
-   $this->pdf->Cell(30,5,109.56,1,0,'C');
+   // $this->pdf->Ln(0);
+   // $this->pdf->SetY($var);
+   // $this->pdf->SetX(14);
+   // $this->pdf->SetFont('Arial','',11);
+   // $this->pdf->Cell(30,5,23,1,0,'C');
+   // $this->pdf->SetFont('Arial','',11);
+   // $this->pdf->Cell(30,5,'111.00',1,0,'C');
+   // $this->pdf->SetFont('Arial','',11);
+   // $this->pdf->Cell(30,5,'6.00',1,0,'C');
+   // $this->pdf->SetFont('Arial','',11);
+   // $this->pdf->Cell(30,5,'104.34',1,0,'C');
+   // $this->pdf->SetFont('Arial','',11);
+   // $this->pdf->Cell(30,5,'5.22 ',1,0,'C');
+   // $this->pdf->SetFont('Arial','',11);
+   // $this->pdf->Cell(30,5,109.56,1,0,'C');
 
    if($var>=$this->pdf->GetPageheight()-30 ){
 
@@ -281,7 +323,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(20,8,'Bank',0,0,'L');
         $this->pdf->Cell(4,8,':',0,0,'L');
-        $this->pdf->Cell(28,8,'ADCb Bank',0,0,'L');
+        $this->pdf->Cell(28,8,'ADCB Bank',0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY($varY+10);
@@ -289,7 +331,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(20,8,'Acount Title',0,0,'L');
         $this->pdf->Cell(4,8,':',0,0,'L');
-        $this->pdf->Cell(28,8,'Cosomporo',0,0,'L');
+        $this->pdf->Cell(28,8,'cosmoprome',0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY($varY+15);
@@ -297,7 +339,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(20,8,'Acount No',0,0,'L');
         $this->pdf->Cell(4,8,':',0,0,'L');
-        $this->pdf->Cell(28,8,'# 24553617682',0,0,'L');
+        $this->pdf->Cell(28,8,'# 242980980',0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY($varY+20);
@@ -305,7 +347,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(20,8,'Swift Code',0,0,'L');
         $this->pdf->Cell(4,8,':',0,0,'L');
-        $this->pdf->Cell(28,8,'# 3834792',0,0,'L');
+        $this->pdf->Cell(28,8,'# weqeq980',0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY($varY+25);
@@ -322,7 +364,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,6,'Total Session','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
-        $this->pdf->Cell(41,6,'23',1,0,'L');
+        $this->pdf->Cell(41,6,$len,1,0,'L');
 
         $this->pdf->Ln(0);
 
@@ -331,7 +373,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,6,'Total amount','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
-        $this->pdf->Cell(41,6,'976.00  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandAmount.'  BDT',1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+12);
@@ -341,7 +383,7 @@ $varY = $var+10;
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->SetFillColor(255,255,255);
-        $this->pdf->MultiCell(41,6,'144.00  BDT','LRTB','L',false);
+        $this->pdf->MultiCell(41,6,$grandDiscount.'  BDT','LRTB','L',false);
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+18);
@@ -350,7 +392,7 @@ $varY = $var+10;
         $this->pdf->Cell(30,6,'Total Taxable','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(41,6,'3045.00  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandTaxable.'  BDT',1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+24);
@@ -359,7 +401,7 @@ $varY = $var+10;
         $this->pdf->Cell(30,6,'Tax Amount','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(41,6,'204.00  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandPercentTax.'  BDT',1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+30);
@@ -368,7 +410,7 @@ $varY = $var+10;
         $this->pdf->Cell(30,6,'Amount Payable','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(41,6,'405.00  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandPayable.'  BDT',1,0,'L');
         $this->pdf->Ln(40);
 
     //    dd($this->pdf->GetY(),$this->pdf->GetPageheight());
@@ -376,7 +418,7 @@ $varY = $var+10;
         $this->pdf->Output('invoice_file.php', 'I');
         exit;
       //}
-    }
+  //  }
 
 }
 }

@@ -65,98 +65,68 @@ class DatePickerInvoice extends Controller
       if($startDateTime<$endDateTime)
       {
 
-        $userSession = UserSessions::where("start_time",">=", $startDateTime)
+        $userSessions = UserSessions::where("start_time",">=", $startDateTime)
                                 ->where("start_time","<=", $endDateTime)
                                 ->where('is_invoiced','NO')
-                                ->get();
+                                ->get()
+                                ->groupBy('tagged_users_machines_id');
 
-    //  dd($invoice->all());
+    //  dd($userSession);
 
-        $var= $userSession->all();
-        $len= count($var);
-        //dd($len);
+      $invoi=rand(10,100);
+    foreach ($userSessions as $res=>$resu) {
 
-        for ($i=0; $i < $len ; $i++) {
+      // $userSession = $resu->first();
+       $increametnInvoice= rand(0,9);
+       $invoi = $invoi + $increametnInvoice;
+       if($increametnInvoice%2 != 0){
+         $invoiceNumberStr = "xyz";
+       }
+       else {
+         $invoiceNumberStr = "abc";
+       }
 
-              //   echo $var[$i];
-                  //$userSession = UserSessions::findOrFail($i);
+       $invoiceNumberFull = $invoiceNumberStr.str_pad($invoi,5,'0',STR_PAD_LEFT);
 
-               echo $userSession[$i]."  "."\n";
+        //echo "invoice number".$invoiceNumber."\n\n\n\n";
+       // echo "userId==\n\n\n".$tr->user_id."\n\n\n";
+        foreach ($resu as $userSession) {
+          //$invoi= $invoi + 0;
+            //dd($userSession);
+
+          $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+          $total = $userSession->session_rate - $percent;
+          //dd($total);
+          $invoice = new Invoices();
+
+          $invoice->invoices_no = $invoiceNumberFull;
+          $invoice->user_sessions_id = $userSession->id;
+          //echo "userId\n\n\n".$v->id."\n\n\ninvoice number\n\n\n".$invoiceNumberFull;
+          $invoice->from_date  = $userSession->start_time;
+          $invoice->to_date   = $userSession->end_time;
+          $invoice->discount = 10;
+          $invoice->amount   = $userSession->session_rate;
+          $invoice->final_amount   = $total;
+          $invoice->tax_amount = 20;
+          $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+          $invoice->is_active = "YES";
+          $invoice->save();
 
 
-                  $percent = ($request->input('discount') * $userSession[$i]-> session_rate) / 100;
-                  $total = $userSession[$i]-> session_rate - $percent;
-                  //dd($total);
-                  $invoice = new Invoices();
-
-                  $invoice->invoices_no = $userSession[$i]->id;
-                  $invoice->user_sessions_id = $userSession[$i]->id;
-                  $invoice->from_date  = $userSession[$i]-> start_time;
-                  $invoice->to_date   = $userSession[$i]-> end_time;
-                  $invoice->discount = 10;
-                  $invoice->amount   = $userSession[$i]->session_rate;
-                  $invoice->final_amount   = $total;
-                  $invoice->tax_amount = 20;
-                  $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
-                  $invoice->is_active = "YES";
-                  $invoice->save();
+          $userSession->is_invoiced ="YES";
+          $userSession->save();
 
 
-                  $userSession[$i]->is_invoiced ="YES";
-                  $userSession[$i]->save();
-        }
+         }
+       }
        return redirect('/invoice');
-
+     }
         //echo "comparison done\n\n";
-      }
+
       else {
         return back()->with('error','please enter valid date');
       }
         //ddd(gettype($startDateTime));
     }
-    //
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show($id)
-    // {
-    //     //
-    // }
-    //
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit($id)
-    // {
-    //     //
-    // }
-    //
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     //
-    // }
-    //
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy($id)
-    // {
-    //     //
-    // }
+
 }

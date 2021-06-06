@@ -12,60 +12,51 @@
 
               <tr>
                 <th>Invoice number</th>
-                <th>tagged Id</th>
-                <th>User Session Id</th>
-                <th>From date</th>
-                <th>To date</th>
-                <th>Amount</th>
+                <th>total Session Id</th>
+                <th>total Amount</th>
+                <th>Last Date payment</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
 
+          <?php //dd($invoices); ?>
 
-                      <form method="GET"  action="{{ route('create-pdf')}}" class="col s12">
-                        @csrf
 
-                        <div class="col s12">
-              <!-- style="border: 5px solid red;float:left" -->
-                            <?php if (Session::has('taggederror')): ?>
-                              <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 20px;
-                                margin-bottom: 15px;
-                                font-size: 22px;">
 
-                                  {{Session::get('taggederror')}}
+                      @forelse ($invoices as $i)
 
-                              </div>
-                            <?php endif; ?>
-                        </div>
+                      <?php  ?>
 
-                        <div class="col s12">
-              <!-- style="border: 5px solid red;float:left" -->
-                        <?php if (Session::has('error')): ?>
-                          <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 20px;
-                            margin-bottom: 15px;
-                            font-size: 22px;">
-
-                              {{Session::get('error')}}
-
-                          </div>
-                        <?php endif; ?>
-                        </div>
-                      @forelse ($invoices as $invoice)
                       <tr>
-                          <td>
+                          <?php
+                            $len = count($i);
+                            $totalAmount = 0;
 
-                              {{$invoice->invoices_no}}
-                          </td>
-                          <td>{{$invoice->tagged_users_machines_id}}</td>
+                           foreach ($i as $invoice):
+                             $totalAmount = $invoice->amount + $totalAmount;
+                             $invoiceNumber = $invoice->invoices_no;
+                             $id = $invoice->id;
+                             $createdDate = $invoice->created_at;
+                             $lastDate =  $createdDate->addDay(5)->format('d.m.Y');
+                            ?>
+
+                          <?php endforeach;
+                          // dd($id);
+                           ?>
                           <td>
-                              {{$invoice->user_sessions_id}}
+                              {{$invoiceNumber}}
                           </td>
-                        <td>{{ $invoice->start_time }}</td>
-                        <td>{{ $invoice->end_time }}</td>
-                        <td>{{ $invoice->amount }}</td>
+
+                          <td>{{$len}}</td>
+                          <td>
+                              {{$totalAmount}}
+                          </td>
+                        <td>{{ $lastDate }}</td>
+                        <td><a class="btn" href="{{ route('create-pdf',['id'=>$id]) }}">Generate Invoice PDF</a></td>
+                        <!-- <td>{{ $invoice->amount }}</td>
                         <td>
-                          <!-- <a class="btn" href="{{ route('invoice.edit', $invoice->id) }}">create invoice</a> -->
+
 
                           <p>
                             <label>
@@ -73,13 +64,13 @@
                               <span></span>
                             </label>
                           </p>
-                        </td>
+                        </td> -->
                       </tr>
 
                       @empty
                         <tr><td>No session available!!</td></tr>
                       @endforelse
-                      <tr>
+                      <!-- <tr>
                         <td>
                           <div class="row">
                               <div class="col s12">
@@ -89,8 +80,8 @@
                           </div>
                         </td>
 
-                      </tr>
-               </form>
+                      </tr> -->
+               <!-- </form> -->
 
             </tbody>
           </table>

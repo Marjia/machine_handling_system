@@ -12,6 +12,7 @@
        <thead>
          <tr>
              <th>User Name</th>
+             <th>session Id</th>
              <th>tagged Id</th>
              <th>Machine No.</th>
              <th>Start Time</th>
@@ -55,6 +56,7 @@
              <td>
                  {{$invoice->name}}
              </td>
+             <td>{{$invoice->id}}</td>
              <td>{{$invoice->tagged_users_machines_id}}</td>
              <td>
                  {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
