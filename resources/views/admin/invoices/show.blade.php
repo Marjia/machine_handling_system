@@ -11,10 +11,10 @@
               </tr> -->
 
               <tr>
-                <th>Invoice number</th>
-                <th>total Session Id</th>
-                <th>total Amount</th>
-                <th>Last Date payment</th>
+                <th>Invoice ID</th>
+                <th>Total Number of Sessions</th>
+                <th>Total Amount</th>
+                <th>Due Date</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -37,8 +37,35 @@
                              $totalAmount = $invoice->amount + $totalAmount;
                              $invoiceNumber = $invoice->invoices_no;
                              $id = $invoice->id;
+                             $currency = $invoice->currency;
                              $createdDate = $invoice->created_at;
-                             $lastDate =  $createdDate->addDay(5)->format('d.m.Y');
+                             //dd($createdDate->format('D, jS F Y'));
+                             $addedDate =  $createdDate->addDay(5);//->format('D, jS F Y');
+                             //dd(strtotime($addedDate)->addDay(2));
+                             //dd($createdDate->format('D, jS F Y'));
+                             $weekDay = date('D',strtotime($addedDate));
+                             if($weekDay == "Fri")
+                             {
+                               $lastDate = $addedDate->addDay(2)->format('D, jS F Y');
+                              // dd($lastDate);
+                             }
+                             if($weekDay == "Sat")
+                             {
+                               $lastDate = $addedDate->addDay(1)->format('D, jS F Y');
+                               //dd($lastDate);
+                             }
+                             else {
+                               $lastDate = $addedDate->format('D, jS F Y');
+                             }
+
+                             // if($invoice->id %3 == 0)
+                             // {
+                             //   $currency = "AED";
+                             // }
+                             // else {
+                             //   $currency = "BDT";
+                             // }
+                             //->format('D, jS F Y');
                             ?>
 
                           <?php endforeach;
@@ -50,10 +77,17 @@
 
                           <td>{{$len}}</td>
                           <td>
-                              {{$totalAmount}}
+                              {{$totalAmount}} {{$currency}}
                           </td>
-                        <td>{{ $lastDate }}</td>
-                        <td><a class="btn" href="{{ route('create-pdf',['id'=>$id]) }}">Generate Invoice PDF</a></td>
+                          <td>
+                              {{$lastDate}}
+                          </td>
+                        <td>
+                          <a class="btn" href="{{ route('create-pdf',['id'=>$id]) }}">Show PDF</a>
+                        </td>
+                        <td>
+                          <a class="btn" href="#">Pay</a>
+                        </td>
                         <!-- <td>{{ $invoice->amount }}</td>
                         <td>
 
@@ -68,7 +102,7 @@
                       </tr>
 
                       @empty
-                        <tr><td>No session available!!</td></tr>
+                        <tr><td>No invoice available!!</td></tr>
                       @endforelse
                       <!-- <tr>
                         <td>

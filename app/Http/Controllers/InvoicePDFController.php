@@ -62,16 +62,35 @@ class InvoicePDFController extends Controller {
         //$invoice = Invoices::findOrFail($var)->first();
         //dd($invoice);
        $startDateTimeStr = $invoices[0]->from_date;
-       $start_time = Carbon::parse($startDateTimeStr)->format('Y-m-d');
+       $start_time = Carbon::parse($startDateTimeStr)->format('D, jS F Y');
 
        $endDateTimeStr = $invoices[$len-1]->to_date;
-      $end_time = Carbon::parse($endDateTimeStr)->format('Y-m-d');
+      $end_time = Carbon::parse($endDateTimeStr)->format('D, jS F Y');
 
       $created_time = $invoices[0]->created_at;
-      $created = Carbon::parse($created_time)->format('Y-m-d');
+      $created = Carbon::parse($created_time)->format('D, jS F Y');
 
       $lastDateStr = $invoices[$len-1]->created_at;
-      $lastDate = Carbon::parse($lastDateStr)->addDay(5)->format('Y-m-d');
+      $createdDate = Carbon::parse($lastDateStr);
+
+      $addedDate =  $createdDate->addDay(5);//->format('D, jS F Y');
+      //dd(strtotime($addedDate)->addDay(2));
+      //dd($createdDate->format('D, jS F Y'));
+      $weekDay = date('D',strtotime($addedDate));
+      if($weekDay == "Fri")
+      {
+        $lastDate = $addedDate->addDay(2)->format('D, jS F Y');
+       // dd($lastDate);
+      }
+      if($weekDay == "Sat")
+      {
+        $lastDate = $addedDate->addDay(1)->format('D, jS F Y');
+        //dd($lastDate);
+      }
+      else {
+        $lastDate = $addedDate->format('D, jS F Y');
+      }
+
 
       // dd($lastDate);
 
@@ -128,7 +147,7 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetX(118);
         $this->pdf->SetFont('Arial','',10);
         $this->pdf->Cell(32,10,'Billing Period','LRTB','L',false);
-        $this->pdf->MultiCell(45,10,$start_time.' to '.$end_time,'LRTB','L',false);
+        $this->pdf->MultiCell(45,5,$start_time.' to '.$end_time,'LRTB','L',false);
         $this->pdf->Ln(0);
 
         $this->pdf->SetY(55);
@@ -162,13 +181,13 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetY(56);
         $this->pdf->SetX(14);
         $this->pdf->SetFont('Arial','',11);
-        $this->pdf->Cell(80,8,'Bank account type',0,0,'L');
+        $this->pdf->Cell(80,8,$user->bank_account_type,0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY(61);
         $this->pdf->SetX(14);
         $this->pdf->SetFont('Arial','',11);
-        $this->pdf->Cell(80,8,$user->email.'  www.examplesite.com',0,0,'L');
+        $this->pdf->Cell(80,8,$user->email.'  '.$user->web_site,0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY(66);
@@ -269,6 +288,7 @@ class InvoicePDFController extends Controller {
    $grandTaxable = $invoices[$i]->tax_amount + $grandTaxable;
    $grandPercentTax = 5 + $grandPercentTax;
    $grandPayable = $invoices[$i]->total_payable_amount + $grandPayable;
+   $currency = $invoices[$i]->currency;
 
 //   $varTest=104.00;
 //
@@ -373,7 +393,7 @@ $varY = $var+10;
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(30,6,'Total amount','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
-        $this->pdf->Cell(41,6,$grandAmount.'  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandAmount.'  '.$currency,1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+12);
@@ -383,7 +403,7 @@ $varY = $var+10;
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->SetFillColor(255,255,255);
-        $this->pdf->MultiCell(41,6,$grandDiscount.'  BDT','LRTB','L',false);
+        $this->pdf->MultiCell(41,6,$grandDiscount.'  '.$currency,'LRTB','L',false);
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+18);
@@ -392,7 +412,7 @@ $varY = $var+10;
         $this->pdf->Cell(30,6,'Total Taxable','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(41,6,$grandTaxable.'  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandTaxable.'  '.$currency,1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+24);
@@ -401,7 +421,7 @@ $varY = $var+10;
         $this->pdf->Cell(30,6,'Tax Amount','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(41,6,$grandPercentTax.'  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandPercentTax.'  '.$currency,1,0,'L');
         $this->pdf->Ln(0);
 
         $this->pdf->SetY($varY+30);
@@ -410,7 +430,7 @@ $varY = $var+10;
         $this->pdf->Cell(30,6,'Amount Payable','LTB',0,'L');
         $this->pdf->Cell(4,6,':','RTB',0,'L');
         $this->pdf->SetFont('Arial','B',10);
-        $this->pdf->Cell(41,6,$grandPayable.'  BDT',1,0,'L');
+        $this->pdf->Cell(41,6,$grandPayable.'  '.$currency,1,0,'L');
         $this->pdf->Ln(40);
 
     //    dd($this->pdf->GetY(),$this->pdf->GetPageheight());

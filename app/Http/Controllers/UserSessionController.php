@@ -65,6 +65,7 @@ class UserSessionController extends Controller
                $userSession->user_id=$userId;
                $userSession->tagged_users_machines_id=$input->id;
                $userSession->session_rate = $input->hourly_session_charge;
+               $userSession->currency = $input->currency;
                $userSession->logged_at=Carbon::now();
                $userSession->start_time=$start_time;
                if($userId %2 != 0){

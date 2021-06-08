@@ -28,6 +28,7 @@ class AssignMachineController extends Controller
         'user'=>'required',
         'machine_no'=>'required',
         'hourly_session_charge'=>'required',
+        'currency'=>'required',
         // 'is_active'=>'required',
         // 'tagged_at'=>'required',
 
@@ -38,6 +39,7 @@ class AssignMachineController extends Controller
        $taggedMachine->user_id = $request->input('user');
        $taggedMachine->machine_id=$request->input('machine_no');
        $taggedMachine->hourly_session_charge=$request->input('hourly_session_charge');
+       $taggedMachine->currency=$request->input('currency');
        $taggedMachine->tagged_at=$request->input('tagged_at');
        $taggedMachine->is_active="YES";
        $taggedMachine->tagged_by= Auth::user()->id;

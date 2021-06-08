@@ -80,6 +80,25 @@
             </div>
             <div class="row">
                 <div class="input-field col s12">
+                    <label for="bank_account_type">Bank Account Type : </label>
+                    <input type="text" name="bank_account_type" value="{{ old('bank_account_type')}}">
+                    @error('bank_account_type')
+                        <p>{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="web_site">Web Site Address : </label>
+                    <input type="text" name="web_site" value="{{ old('web_site')}}">
+                    @error('web_site')
+                        <p>{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
                     <select name="is_admin">
                       <option value="" disabled selected>Select</option>
                       <option value="NO"  >NO</option>

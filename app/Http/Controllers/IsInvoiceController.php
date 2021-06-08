@@ -22,7 +22,7 @@ class IsInvoiceController extends Controller
     {
 
       $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time',
+                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time','user_sessions.currency',
                  'user_sessions.end_time','user_sessions.tagged_users_machines_id',
                  'user_sessions.is_invoiced'])
                  ->where('is_invoiced','NO')
@@ -98,6 +98,7 @@ class IsInvoiceController extends Controller
               $invoice->to_date   = $userSession->end_time;
               $invoice->discount = 10;
               $invoice->amount   = $userSession->session_rate;
+              $invoice->currency   = $userSession->currency;
               $invoice->final_amount   = $total;
               $invoice->tax_amount = 20;
               $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;

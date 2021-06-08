@@ -106,6 +106,7 @@ class DatePickerInvoice extends Controller
           $invoice->to_date   = $userSession->end_time;
           $invoice->discount = 10;
           $invoice->amount   = $userSession->session_rate;
+          $invoice->currency   = $userSession->currency;
           $invoice->final_amount   = $total;
           $invoice->tax_amount = 20;
           $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;

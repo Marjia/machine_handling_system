@@ -52,6 +52,8 @@ class UserPostsController extends Controller
         $addUser->phone_number=$request->input('phone_number');
         $addUser->address=$request->input('address');
         $addUser->tax_reg_no=$request->input('tax_reg_no');
+        $addUser->bank_account_type=$request->input('bank_account_type');
+        $addUser->web_site=$request->input('web_site');
         $addUser->is_admin=$request->input('is_admin');
         $addUser->is_active="YES";
         $addUser->password= Hash::make($request['password']);
@@ -110,6 +112,8 @@ class UserPostsController extends Controller
             'company_name' =>'required|string',
             'phone_number' =>'required|numeric',
             'address' =>'required|string',
+            'bank_account_type' =>'required|string',
+            'web_site' =>'required',
             'tax_reg_no' =>'required|numeric',
             'is_admin' =>'required',
             'is_active' =>'required',
@@ -126,6 +130,8 @@ class UserPostsController extends Controller
         $userPost->company_name=$request->input('company_name');
         $userPost->phone_number=$request->input('phone_number');
         $userPost->address=$request->input('address');
+        $userPost->bank_account_type=$request->input('bank_account_type');
+        $userPost->web_site=$request->input('web_site');
         $userPost->tax_reg_no=$request->input('tax_reg_no');
         $userPost->is_admin=$request->input('is_admin');
         $userPost->is_active=$request->input('is_active');

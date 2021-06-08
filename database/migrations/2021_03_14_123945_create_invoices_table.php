@@ -20,6 +20,7 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('user_sessions_id')->nullable()->constrained('user_sessions');
             $table->dateTime('from_date');
             $table->dateTime('to_date');
+            $table->string('currency')->nullable();
             $table->double('amount',5,2);
             $table->double('discount');
             $table->double('final_amount',5,2);

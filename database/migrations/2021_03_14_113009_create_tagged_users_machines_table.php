@@ -18,6 +18,7 @@ class CreateTaggedUsersMachinesTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('machine_id')->nullable()->constrained('machines');
             $table->double('hourly_session_charge',5,2);
+            $table->string('currency')->nullable();
             $table->string('is_active',3)->default('NO');
             $table->dateTime('tagged_at')->nullable();
             $table->dateTime('detagged_at')->nullable();

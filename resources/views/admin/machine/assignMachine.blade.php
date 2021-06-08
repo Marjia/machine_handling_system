@@ -16,7 +16,7 @@
                       @endforeach
 
                     </select>
-              User Name      <label>User Name</label>
+                    <label>User Name</label>
                     @error('name')
                         <p>{{ $message }}</p>
                     @enderror
@@ -32,16 +32,31 @@
 
                     </select>
                     <label>Machine No.</label>
-              User Name      @error('machine_no')
+                            @error('machine_no')
                         <p>{{ $message }}</p>
                     @enderror
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s12">
+                <div class="input-field col s6">
                     <label for="hourly_session_charge">Hourly session charge : </label>
                     <input type="number" name="hourly_session_charge" value="{{ old('hourly_session_charge')}}" max="999.00">
                     @error('hourly_session_charge')
+                        <p>{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="input-field col s6">
+                    <select name="currency" id="currency">
+                      <option value="" disabled selected>Select</option>
+
+
+                        <option value="BDT">BDT</option>
+                        <option value="AED">AED</option>
+                        <option value="USD">USD</option>
+
+                    </select>
+                    <label>Currency</label>
+                    @error('currency')
                         <p>{{ $message }}</p>
                     @enderror
                 </div>

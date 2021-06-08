@@ -33,6 +33,8 @@ class StoreUserPost extends FormRequest
             'address' =>'required|string',
             'tax_reg_no' =>'required|numeric',
             'is_admin' =>'required',
+            'bank_account_type'=>'required',
+            'web_site'=>'required',
             // 'is_active' =>'required',
             'email' => 'required|string|email|max:255|unique:users',
             'password'=>'min:1|max:15|required_with:password_confirmation|same:password_confirmation',
