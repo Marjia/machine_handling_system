@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="container">
+  @guest
+   @include('auth.login')
+  @endguest
+  @auth
+
     <div class="row">
         <table>
             <thead>
@@ -82,43 +87,71 @@
                           <td>
                               {{$lastDate}}
                           </td>
-                        <td>
-                          <a class="btn" href="{{ route('create-pdf',['id'=>$id]) }}">Show PDF</a>
-                        </td>
-                        <td>
-                          <a class="btn" href="#">Pay</a>
-                        </td>
-                        <!-- <td>{{ $invoice->amount }}</td>
-                        <td>
+                          <td>
+                            <a class="btn" href="{{ route('create-pdf',['id'=>$id]) }}" style="background: linear-gradient(60deg,#616161,#212121);">show PDF</a>
+                           </td>
+                           <td>
+                             <a class='dropdown-trigger btn' href='#' data-target='dropdown1' style="background: linear-gradient(60deg,#c62828,#b71c1c);">Pay</a>
 
-
-                          <p>
-                            <label>
-                              <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}" />
-                              <span></span>
-                            </label>
-                          </p>
-                        </td> -->
-                      </tr>
-
+                                <ul id='dropdown1' class='dropdown-content'>
+                                    <li>
+                                      <a class="waves-effect waves-light modal-trigger" href="#modal1">cards</a>
+                                    </li>
+                                    <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Mobile Banking</a></li>
+                                    <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Net Banking</a></li>
+                                  </ul>
+                             </td>
+                        </tr>
                       @empty
-                        <tr><td>No invoice available!!</td></tr>
+                        <tr><td>No Invoice available!!</td></tr>
                       @endforelse
-                      <!-- <tr>
-                        <td>
-                          <div class="row">
-                              <div class="col s12">
-                                  <button type="submit" class="btn">Generate PDF Invoice</button>
-
-                              </div>
-                          </div>
-                        </td>
-
-                      </tr> -->
-               <!-- </form> -->
-
             </tbody>
           </table>
-    </div>
+      </div>
 </div>
+<div id="modal1" class="modal col s4">
+    <div class="modal-content col s4">
+    <h4>Bank Details for payment</h4>
+    <table>
+        <tbody>
+              <tr>
+                <td>Bank :</td>
+                <td>ADCB Bank</td>
+              </tr>
+              <tr>
+                <td>Account Title :</td>
+                <td>cosmoprome</td>
+              </tr>
+              <tr>
+                <td>Account No:</td>
+                <td># 242980980</td>
+              </tr>
+              <tr>
+                <td>Swift Code :</td>
+                <td># weqeq980</td>
+              </tr>
+              <tr>
+                <td>Branch :</td>
+                <td>Dhaka</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat col s4">OK</a>
+        </div>
+     </div>
+  @endauth
+  </div>
+@endsection
+@section('customJs')
+  <script>
+     document.addEventListener('DOMContentLoaded', function() {
+       var elems = document.querySelectorAll('.dropdown-trigger');
+       var instances = M.Dropdown.init(elems);
+
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+      });
+ </script>
 @endsection
