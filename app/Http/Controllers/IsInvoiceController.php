@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\UserSessions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 class IsInvoiceController extends Controller
 {
@@ -20,14 +20,16 @@ class IsInvoiceController extends Controller
      */
     public function index()
     {
-
+      // dd( Auth::user()->id);
       $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
                  ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time','user_sessions.currency',
                  'user_sessions.end_time','user_sessions.tagged_users_machines_id',
                  'user_sessions.is_invoiced'])
                  ->where('is_invoiced','NO')
+                //->where('user_id', "=", Auth::user()->id)
                  ->orderBy('users.name', 'asc')
                  ->get();
+
         return view('admin.invoices.index', ['invoices'=> $invoices,
         'machines'=>Machines::all()]);
     }
@@ -61,6 +63,7 @@ class IsInvoiceController extends Controller
         return back()->with('error','select to create invoice');
       }
       else {
+
 
         $var=$request->checkArr;
         //$len= count($var);
@@ -103,13 +106,19 @@ class IsInvoiceController extends Controller
               $invoice->tax_amount = 20;
               $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
               $invoice->is_active = "YES";
-              $invoice->save();
+              //$invoice->save();
 
 
               $userSession->is_invoiced ="YES";
-              $userSession->save();
+              //$userSession->save();
             }
 
+        }
+         $user= User::findOrFail($userSession->user_id);
+      //  dd($user->is_admin);
+
+        if ($user->is_admin == "NO") {
+          return redirect('/user-invoice');
         }
         return redirect('/invoice');
       }

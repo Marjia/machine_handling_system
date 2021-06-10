@@ -14,19 +14,32 @@ use App\Http\Controllers\UserSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DatePickerInvoice;
 use App\Http\Controllers\InvoicePDFController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ShowSessionController;
+use App\Http\Controllers\UserInvoiceController;
 
 use Illuminate\Support\Facades\Route;
 
 
 Route::view('/','template.home')->name('home');
 
-Route::get('admin/dashboard',[HomeController::class, 'adminHome'])
-      ->name('admin-home')
-      ->middleware('is_admin');
-Route::view('/dashboard','admin.dashboard')->name('adminDashboard');
+// Route::get('admin/dashboard',[HomeController::class, 'adminHome'])
+//       ->name('admin-home')
+//       ->middleware('is_admin');
+//Route::view('/dashboard','admin.dashboard')->name('dashboard');
+
+
+//dashboard route
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
+});
+
+//admin machine routes
 
 Route::resource('machine',MachinePostContoller::class)->except(['destroy']);
 Route::get('machine/{id}/delete',[MachineDeactivationController::class, 'edit'])->name('machine-delete');
+
+// admin tag machine routes
 
 Route::get('/assign-machine',[AssignMachineController::class,'create'])->name('assign-machine');
 Route::post('/assign-machine', [AssignMachineController::class,'store']);
@@ -39,11 +52,24 @@ Route::get(
 Route::resource('user', UserPostsController::class)->except(['destroy']);
 Route::get('user/{id}/delete',[UserDeactivationController::class, 'edit'])->name('user-delete');
 
+//admin invoice routes
+
 Route::resource('invoice',IsInvoiceController::class)->only(['index','store','edit','update','show','create']);
 Route::resource('date-invoice',DatePickerInvoice::class)->only(['store']);
-Route::get('generate-invoice/{id}',[GenerateInvoicePdfController::class,'invoices'])->name('generate-invoices');
 Route::get('/pdf/{id}', [InvoicePDFController::class, 'createPDF'])->name('create-pdf');
+// Route::view('/cards','admin.invoices.cards')->name('cards-payment');
+// Route::view('/mobile-banking','admin.invoices.mobileBanking')->name('mobile-banking-payment');
+// Route::view('/net-banking','admin.invoices.netBanking')->name('net-banking-payment');
+
+//admin session routes
 
 Route::resource('user-session',UserSessionController::class)->only(['index','edit','update','store']);
 
+//show profile route
 Route::get('/profile',[ProfileController::class,'profileController'])->name('profile');
+
+//user session Controller
+Route::resource('show-session',ShowSessionController::class)->only(['index']);
+
+//user invoice controller
+Route::resource('user-invoice',UserInvoiceController::class)->only(['index','store','edit','update','show','create']);

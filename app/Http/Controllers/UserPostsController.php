@@ -54,11 +54,17 @@ class UserPostsController extends Controller
         $addUser->tax_reg_no=$request->input('tax_reg_no');
         $addUser->bank_account_type=$request->input('bank_account_type');
         $addUser->web_site=$request->input('web_site');
-        $addUser->is_admin=$request->input('is_admin');
+        if ($request->role_id == 2) {
+          $addUser->is_admin="NO";
+        }elseif ($request->role_id == 1) {
+          $addUser->is_admin="YES";
+        }
         $addUser->is_active="YES";
         $addUser->password= Hash::make($request['password']);
 
+
         $addUser->save();
+        $addUser->attachRole($request->role_id);
 
         return redirect('/user');
 
@@ -134,6 +140,24 @@ class UserPostsController extends Controller
         $userPost->web_site=$request->input('web_site');
         $userPost->tax_reg_no=$request->input('tax_reg_no');
         $userPost->is_admin=$request->input('is_admin');
+
+//updating role of user          
+        if ($userPost->is_admin == "YES") {
+
+          if ($userPost->hasRole('admin') == true) {
+            $userPost->detachRole('admin');
+          }elseif ($userPost->hasRole('user') == true) {
+            $userPost->detachRole('user');
+          }
+          $userPost->attachRole('admin');
+        }elseif ($userPost->is_admin == "NO") {
+          if ($userPost->hasRole('admin') == true) {
+            $userPost->detachRole('admin');
+          }elseif ($userPost->hasRole('user') == true) {
+            $userPost->detachRole('user');
+          }
+          $userPost->attachRole('user');
+        }
         $userPost->is_active=$request->input('is_active');
         //$userPost->secret= Hash::make($request['secret']);
 

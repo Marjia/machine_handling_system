@@ -99,13 +99,13 @@
 
             <div class="row">
                 <div class="input-field col s12">
-                    <select name="is_admin">
+                    <select name="role_id">
                       <option value="" disabled selected>Select</option>
-                      <option value="NO"  >NO</option>
-                      <option value="YES" >YES</option>
+                      <option value="2"  >User</option>
+                      <option value="1" >Admin</option>
                     </select>
-                    <label>Admin</label>
-                    @error('is_admin')
+                    <label>Register as:</label>
+                    @error('role_id')
                         <p>{{ $message }}</p>
                     @enderror
                 </div>

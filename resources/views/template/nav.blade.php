@@ -9,7 +9,13 @@
                 @endguest
                 @auth
                     <li><a href="{{ route('profile') }}">{{ auth()->user()->name }}</a></li>
-                    <li><a href="{{ route('adminDashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li>
+                  	<form action="{{route('logout')}}" method="post">
+                  	  @csrf
+                  	  <button type="submit" class="btn grey darken-3">Logout</button>
+                  	</form>
+                    </li>
                 @endauth
             </ul>
         </div>
