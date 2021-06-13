@@ -13,7 +13,6 @@
          <tr>
              <th>User Name</th>
              <th>session Id</th>
-             <th>tagged Id</th>
              <th>Machine No.</th>
              <th>Start Time</th>
              <th>End Time</th>
@@ -24,13 +23,10 @@
        </thead>
        <tbody>
 
-         <form method="POST"  action="{{ route('invoice.store')}}" class="col s24">
-           @csrf
 
-         <tr>
-           <div class="col s12">
- <!-- style="border: 5px solid red;float:left" -->
-           <?php if (Session::has('error')): ?>
+
+           <!-- <div class="col s12">
+           <?php //if (Session::has('error')): ?>
              <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 20px;
                margin-bottom: 15px;
                font-size: 22px;">
@@ -38,53 +34,31 @@
                  {{Session::get('error')}}
 
              </div>
-           <?php endif; ?>
-           </div>
+           <?php //endif; ?>
+           </div> -->
+           <tr>
             @forelse ($invoices as $invoice)
              <td>
                  {{$invoice->name}}
              </td>
              <td>{{$invoice->id}}</td>
-             <td>{{$invoice->tagged_users_machines_id}}</td>
              <td>
                  {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
              </td>
-           <td>{{ $invoice->start_time }}</td>
-           <td>{{ $invoice->end_time }}</td>
-           <td>{{ $invoice->is_invoiced }}</td>
-           <td>
-             <p>
-               <label>
-                 <input type="checkbox" class="filled-in" name="checkArr[]" value="{{$invoice->id}}"/>
-                 <span></span>
-               </label>
-             </p>
-           </td>
+             <td>{{ $invoice->start_time }}</td>
+             <td>{{ $invoice->end_time }}</td>
+             <td>{{ $invoice->is_invoiced }}</td>
+             <td>
+               <a class="btn" href="{{ route('invoice.edit', [$invoice->id]) }}">Create Invoice</a>
+             </td>
          </tr>
          @empty
-           <tr><td>No session available!!</td></tr>
+         <tr><td>No session available!!</td></tr>
          @endforelse
+     <!-- </form> -->
          <tr>
            <td>
-             <div class="row">
-               <div class="input-field col s6">
-                 <label>Discount Rate</label>
-                 <input type="number" name="discount" value="discount">
-               </div>
-                 <div class="col s12">
-  <!-- style="border: 5px solid red;float:left" -->
-                     <button type="submit" class="btn">Create Invoice</button>
-
-                 </div>
-
-             </div>
-           </td>
-
-         </tr>
-     </form>
-         <tr>
-           <td>
-             <form method="POST"  action="{{ route('date-invoice.store') }}" class="col s12" >
+             <form method="POST"  action="{{ route('invoice.store') }}" class="col s12" >
                @csrf
                <!-- @method('PUT') -->
             <?php

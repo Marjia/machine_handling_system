@@ -17,6 +17,7 @@ use App\Http\Controllers\InvoicePDFController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShowSessionController;
 use App\Http\Controllers\UserInvoiceController;
+use App\Http\Controllers\ShowTaggedMachine;
 
 use Illuminate\Support\Facades\Route;
 
@@ -70,6 +71,9 @@ Route::get('/profile',[ProfileController::class,'profileController'])->name('pro
 
 //user session Controller
 Route::resource('show-session',ShowSessionController::class)->only(['index']);
+
+//user tagged maachine
+Route::resource('show-tagged-machine',ShowTaggedMachine::class)->only(['index']);
 
 //user invoice controller
 Route::resource('user-invoice',UserInvoiceController::class)->only(['index','store','edit','update','show','create']);

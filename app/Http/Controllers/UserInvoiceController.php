@@ -25,7 +25,7 @@ class UserInvoiceController extends Controller
                  'user_sessions.end_time','user_sessions.tagged_users_machines_id',
                  'user_sessions.is_invoiced'])
                  ->where('is_invoiced','NO')
-                ->where('user_id', "=", Auth::user()->id)
+                 ->where('user_id', "=", Auth::user()->id)
                 // ->orderBy('users.name', 'asc')
                  ->get();
 
@@ -60,9 +60,19 @@ class UserInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+    //  dd(Auth::user()->id);
+      $invoices = Invoices::Join('user_sessions','user_sessions.id','=','invoices.user_sessions_id')
+                           ->select(['invoices.id','invoices.currency','invoices.created_at','invoices.amount',
+                                   'invoices.amount','invoices.invoices_no','user_sessions.user_id'])
+                            //  select("*")
+                             ->orderBy('invoices_no','asc')
+                           ->where('user_id', "=", Auth::user()->id)
+                           ->get()
+                           ->groupBy('invoices_no');
+        //  dd($invoices);
+      return view('admin.invoices.show',['invoices'=> $invoices]);
     }
 
     /**

@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\UserSessions;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
 
 class DatePickerInvoice extends Controller
 {
@@ -68,10 +70,11 @@ class DatePickerInvoice extends Controller
         $userSessions = UserSessions::where("start_time",">=", $startDateTime)
                                 ->where("start_time","<=", $endDateTime)
                                 ->where('is_invoiced','NO')
+                                ->where('user_id', "=", Auth::user()->id)
                                 ->get()
                                 ->groupBy('tagged_users_machines_id');
 
-    //  dd($userSession);
+      //dd($userSessions->user_id);
 
       $invoi=rand(10,100);
     foreach ($userSessions as $res=>$resu) {
@@ -120,14 +123,14 @@ class DatePickerInvoice extends Controller
 
          }
        }
-       return redirect('/invoice');
+
+       return redirect('/user-invoice');
      }
-        //echo "comparison done\n\n";
 
       else {
         return back()->with('error','please enter valid date');
       }
-        //ddd(gettype($startDateTime));
+
     }
 
 }

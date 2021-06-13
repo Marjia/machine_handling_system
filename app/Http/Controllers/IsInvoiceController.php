@@ -59,69 +59,152 @@ class IsInvoiceController extends Controller
     {
 
 
-      if($request->checkArr==NULL){
-        return back()->with('error','select to create invoice');
-      }
-      else {
+      //dd($request->all());
+      $inputs = $request->all();
+      $startDateTimeStr = $inputs['start_date'] . " " . $inputs['start_time'];
+      $endDateTimeStr = $inputs['end_date'] . " " . $inputs['end_time'];
+      // Amar bujte subista hobe
+      $startDateTime = Carbon::parse($startDateTimeStr)->format('Y-m-d H:i:s');
+      // Subusta
+      $endDateTime = Carbon::parse($endDateTimeStr)->format('Y-m-d H:i:s');
+      // dd($startDateTime);
+      // Hello
+      // ddd($startDateTime, $endDateTime);
+
+    if($startDateTime<$endDateTime)
+    {
+
+      $userSessions = UserSessions::where("start_time",">=", $startDateTime)
+                              ->where("start_time","<=", $endDateTime)
+                              ->where('is_invoiced','NO')
+                              //->where('user_id', "=", Auth::user()->id)
+                              ->get()
+                              ->groupBy('tagged_users_machines_id');
+
+    dd($userSessions->user_id);
+
+    $invoi=rand(10,100);
+  foreach ($userSessions as $res=>$resu) {
+
+    // $userSession = $resu->first();
+     $increametnInvoice= rand(0,9);
+     $invoi = $invoi + $increametnInvoice;
+     if($increametnInvoice%2 != 0){
+       $invoiceNumberStr = "xyz";
+     }
+     else {
+       $invoiceNumberStr = "abc";
+     }
+
+     $invoiceNumberFull = $invoiceNumberStr.str_pad($invoi,5,'0',STR_PAD_LEFT);
+
+      //echo "invoice number".$invoiceNumber."\n\n\n\n";
+     // echo "userId==\n\n\n".$tr->user_id."\n\n\n";
+      foreach ($resu as $userSession) {
+        //$invoi= $invoi + 0;
+          //dd($userSession);
+
+        $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+        $total = $userSession->session_rate - $percent;
+        //dd($total);
+        $invoice = new Invoices();
+
+        $invoice->invoices_no = $invoiceNumberFull;
+        $invoice->user_sessions_id = $userSession->id;
+        //echo "userId\n\n\n".$v->id."\n\n\ninvoice number\n\n\n".$invoiceNumberFull;
+        $invoice->from_date  = $userSession->start_time;
+        $invoice->to_date   = $userSession->end_time;
+        $invoice->discount = 10;
+        $invoice->amount   = $userSession->session_rate;
+        $invoice->currency   = $userSession->currency;
+        $invoice->final_amount   = $total;
+        $invoice->tax_amount = 20;
+        $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+        $invoice->is_active = "YES";
+        $invoice->save();
 
 
-        $var=$request->checkArr;
-        //$len= count($var);
-
-        $userSessions = UserSessions::findOrFail($var)->groupBy('tagged_users_machines_id');
-
-          $invoi=rand(10,1000);
-        foreach ($userSessions as $res=>$resu) {
-
-          // $userSession = $resu->first();
-          $increametnInvoice= rand(0,10);
-          $invoi = $invoi + $increametnInvoice;
-          if($increametnInvoice%2 != 0){
-            $invoiceNumberStr = "xyz";
-          }
-          else {
-            $invoiceNumberStr = "abc";
-          }
-
-           $invoiceNumberFull = $invoiceNumberStr.str_pad($invoi,5,'0',STR_PAD_LEFT);
-
-            foreach ($resu as $userSession) {
-              //$invoi= $invoi + 0;
+        $userSession->is_invoiced ="YES";
+        $userSession->save();
 
 
-              $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
-              $total = $userSession->session_rate - $percent;
-              //dd($total);
-              $invoice = new Invoices();
+       }
+     }
 
-              $invoice->invoices_no = $invoiceNumberFull;
-              $invoice->user_sessions_id = $userSession->id;
-              //echo "userId\n\n\n".$v->id."\n\n\ninvoice number\n\n\n".$invoiceNumberFull;
-              $invoice->from_date  = $userSession->start_time;
-              $invoice->to_date   = $userSession->end_time;
-              $invoice->discount = 10;
-              $invoice->amount   = $userSession->session_rate;
-              $invoice->currency   = $userSession->currency;
-              $invoice->final_amount   = $total;
-              $invoice->tax_amount = 20;
-              $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
-              $invoice->is_active = "YES";
-              //$invoice->save();
+      return redirect('/invoice');
+   }
+
+    else {
+      return back()->with('error','please enter valid date');
+    }
 
 
-              $userSession->is_invoiced ="YES";
-              //$userSession->save();
-            }
-
-        }
-         $user= User::findOrFail($userSession->user_id);
-      //  dd($user->is_admin);
-
-        if ($user->is_admin == "NO") {
-          return redirect('/user-invoice');
-        }
-        return redirect('/invoice');
-      }
+      // dd($request->all());
+      //
+      //
+      // if($request->checkArr==NULL){
+      //   return back()->with('error','select to create invoice');
+      // }
+      // else {
+      //
+      //
+      //   $var=$request->checkArr;
+      //   //$len= count($var);
+      //
+      //   $userSessions = UserSessions::findOrFail($var)->groupBy('tagged_users_machines_id');
+      //
+      //     $invoi=rand(10,1000);
+      //   foreach ($userSessions as $res=>$resu) {
+      //
+      //     // $userSession = $resu->first();
+      //     $increametnInvoice= rand(0,10);
+      //     $invoi = $invoi + $increametnInvoice;
+      //     if($increametnInvoice%2 != 0){
+      //       $invoiceNumberStr = "xyz";
+      //     }
+      //     else {
+      //       $invoiceNumberStr = "abc";
+      //     }
+      //
+      //      $invoiceNumberFull = $invoiceNumberStr.str_pad($invoi,5,'0',STR_PAD_LEFT);
+      //
+      //       foreach ($resu as $userSession) {
+      //         //$invoi= $invoi + 0;
+      //
+      //
+      //         $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+      //         $total = $userSession->session_rate - $percent;
+      //         //dd($total);
+      //         $invoice = new Invoices();
+      //
+      //         $invoice->invoices_no = $invoiceNumberFull;
+      //         $invoice->user_sessions_id = $userSession->id;
+      //         //echo "userId\n\n\n".$v->id."\n\n\ninvoice number\n\n\n".$invoiceNumberFull;
+      //         $invoice->from_date  = $userSession->start_time;
+      //         $invoice->to_date   = $userSession->end_time;
+      //         $invoice->discount = 10;
+      //         $invoice->amount   = $userSession->session_rate;
+      //         $invoice->currency   = $userSession->currency;
+      //         $invoice->final_amount   = $total;
+      //         $invoice->tax_amount = 20;
+      //         $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+      //         $invoice->is_active = "YES";
+      //         //$invoice->save();
+      //
+      //
+      //         $userSession->is_invoiced ="YES";
+      //         //$userSession->save();
+      //       }
+      //
+      //   }
+      //    $user= User::findOrFail($userSession->user_id);
+      // //  dd($user->is_admin);
+      //
+      //   if ($user->is_admin == "NO") {
+      //     return redirect('/user-invoice');
+      //   }
+      //   return redirect('/invoice');
+      // }
 
     }
 
@@ -137,22 +220,6 @@ class IsInvoiceController extends Controller
                            ->orderBy('invoices_no','asc')
                            ->get()
                            ->groupBy('invoices_no');
-
-        // foreach ($invoices as $totalInv) {
-        //   $len = count($totalInv);
-        //   echo "\n\n\nlength\n\n\n\n".$len;
-        //    $totalAmount = 0;
-        //   foreach ($totalInv as $invoi) {
-        //       $totalAmount = $invoi->amount + $totalAmount;
-        //       $createdDate = $invoi->created_at;
-        //       $lastDate =  $createdDate->addDay(5)->format('d.m.Y');
-        //       //$lastDate =Carbon::createFromFormat('Y.m.d', $date);
-        //   }
-        //   echo "\n\n\n\ntotal amaount\n\n\n\n".$lastDate;
-        // }
-       //  $length=count($invoices);
-       //  echo "\n\n\nlength full\n\n\n".$length;
-      // dd($lastDate);
       return view('admin.invoices.show',['invoices'=> $invoices]);
     }
 
@@ -162,10 +229,56 @@ class IsInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
-        $invoice = $request->all();
-        dd($invoice);
+        //$invoice = $request;
+        //dd($id);
+
+        $userSession = UserSessions::findOrFail($id);
+        $invoi=rand(10,1000);
+        $increametnInvoice= rand(0,10);
+
+        $invoi = $invoi + $increametnInvoice;
+        if($increametnInvoice%2 != 0){
+          $invoiceNumberStr = "xyz";
+        }
+        else {
+          $invoiceNumberStr = "abc";
+        }
+
+         $invoiceNumberFull = $invoiceNumberStr.str_pad($invoi,5,'0',STR_PAD_LEFT);
+
+         $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+         $total = $userSession->session_rate - $percent;
+         //dd($total);
+         $invoice = new Invoices();
+
+         $invoice->invoices_no = $invoiceNumberFull;
+         $invoice->user_sessions_id = $userSession->id;
+         //echo "userId\n\n\n".$v->id."\n\n\ninvoice number\n\n\n".$invoiceNumberFull;
+         $invoice->from_date  = $userSession->start_time;
+         $invoice->to_date   = $userSession->end_time;
+         $invoice->discount = 10;
+         $invoice->amount   = $userSession->session_rate;
+         $invoice->currency   = $userSession->currency;
+         $invoice->final_amount   = $total;
+         $invoice->tax_amount = 20;
+         $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
+         $invoice->is_active = "YES";
+         $invoice->save();
+
+
+         $userSession->is_invoiced ="YES";
+         $userSession->save();
+
+        $user= User::findOrFail(Auth::user()->id);
+
+         if ($user->is_admin == "NO") {
+           return redirect('/user-invoice');
+         }elseif($user->is_admin == "YES") {
+           return redirect('/invoice');
+         }
+
 
         //return view('admin.invoices.create',['invoices'=>$invoice]);
     }
@@ -182,39 +295,6 @@ class IsInvoiceController extends Controller
 
         dd($request->all());
 
-        //$userSession = UserSessions::findOrFail($id);
-
-
-        // $request->validate([
-        //     'discount'=>'required',
-        //     'tax_amount' => 'required',
-        //
-        // ]);
-        //
-        // $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
-        // $total = $userSession-> session_rate - $percent;
-        // //dd($total);
-        // $invoice = new Invoices();
-        //
-        // $invoice->invoices_no = $userSession->id;
-        // $invoice->user_sessions_id = $userSession->id;
-        // $invoice->from_date  = $userSession-> start_time;
-        // $invoice->to_date   = $userSession-> end_time;
-        // $invoice-> discount = $request->input('discount');
-        // $invoice->amount   = $userSession-> session_rate;
-        // $invoice->final_amount   = $total;
-        // $invoice-> tax_amount = $request->input('tax_amount');
-        // $invoice->total_payable_amount = $invoice->final_amount+$invoice->tax_amount+$invoice->discount;
-        // $invoice-> is_active = "YES";
-        // $invoice->save();
-        //
-        //
-        // $userSession->is_invoiced ="YES";
-        // $userSession->save();
-        //
-        // //return redirect(route('invoice.show',$invoice->id));
-        //
-        // return redirect('/invoice');
     }
 
     // /**

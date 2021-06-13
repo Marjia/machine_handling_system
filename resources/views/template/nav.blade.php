@@ -8,7 +8,8 @@
                     <li><a href="{{route('login')}}">Log In</a></li>
                 @endguest
                 @auth
-                    <li><a href="{{ route('profile') }}">{{ auth()->user()->name }}</a></li>
+                    <li><a href="{{ route('profile') }}">{{ auth()->user()->name }}</a>
+                    </li>
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                     <li>
                   	<form action="{{route('logout')}}" method="post">

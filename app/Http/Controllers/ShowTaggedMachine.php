@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoices;
-use App\Models\Machines;
-use App\Models\TaggedUsersMachines;
 use App\Models\User;
+use App\Models\TaggedUsersMachines;
+use App\Models\Machines;
 use App\Models\UserSessions;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
-class ShowSessionController extends Controller
+class ShowTaggedMachine extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,18 +19,11 @@ class ShowSessionController extends Controller
      */
     public function index()
     {
-      //$id = Auth::user()->id;
-      $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time','user_sessions.currency',
-                 'user_sessions.end_time','user_sessions.tagged_users_machines_id',
-                 'user_sessions.is_invoiced'])
-                 ->where('is_invoiced','NO')
-                ->where('user_id', "=", Auth::user()->id)
-                 //->orderBy('users.name', 'asc')
-                 ->get();
-        return view('userView.showSession', ['invoices'=> $invoices,
-        'machines'=>Machines::all()]);
+      $taggmachine= TaggedUsersMachines::where('is_active','YES')
+                                         ->where('user_id', "=", Auth::user()->id)
+                                         ->get();
 
+      return view('userView.showTaggedMachine', ["taggedMachines"=>$taggmachine,"machines"=>Machines::all()]);
     }
 
     // /**

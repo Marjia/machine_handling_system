@@ -16,7 +16,7 @@
             <div class="col s6">
                 <div class="card-panel yellow darken-4">
                     <div class="card-action">
-                        <a class="white-text" href="{{route('show-session.index')}}">Sessions</a>
+                        <a class="white-text" href="{{route('show-tagged-machine.index')}}">Tagged Machines</a>
                     </div>
                 </div>
             </div>
