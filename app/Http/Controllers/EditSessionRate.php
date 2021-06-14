@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoices;
 use App\Models\Machines;
 use App\Models\TaggedUsersMachines;
 use App\Models\User;
 use App\Models\UserSessions;
-use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Http\Request;
 
-class UserInvoiceController extends Controller
+class EditSessionRate extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,17 +17,10 @@ class UserInvoiceController extends Controller
      */
     public function index()
     {
-      $invoices = UserSessions::join('users','users.id','=','user_sessions.user_id')
-                 ->select(['users.name','user_sessions.user_id','user_sessions.id','user_sessions.start_time','user_sessions.currency',
-                 'user_sessions.end_time','user_sessions.tagged_users_machines_id',
-                 'user_sessions.is_invoiced'])
-                 ->where('is_invoiced','NO')
-                 ->where('user_id', "=", Auth::user()->id)
-                // ->orderBy('users.name', 'asc')
-                 ->get();
+      $taggmachine= TaggedUsersMachines::where('is_active','YES')->get();
 
-        return view('userView.invoices.index', ['invoices'=> $invoices,
-        'machines'=>Machines::all()]);
+      return view('admin.userSession.editSessionRate.index', ["taggedMachines"=>$taggmachine,"machines"=>Machines::all(), "users"=>User::all()]);
+        //
     }
 
     /**
@@ -60,19 +50,9 @@ class UserInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-    //  dd(Auth::user()->id);
-      $invoices = Invoices::Join('user_sessions','user_sessions.id','=','invoices.user_sessions_id')
-                           ->select(['invoices.id','invoices.currency','invoices.created_at','invoices.amount',
-                                   'invoices.amount','invoices.invoices_no','user_sessions.user_id'])
-                            //  select("*")
-                           ->orderBy('id','desc')
-                           ->where('user_id', "=", Auth::user()->id)
-                           ->get()
-                           ->groupBy('invoices_no');
-        //  dd($invoices);
-      return view('admin.invoices.show',['invoices'=> $invoices]);
+        //
     }
 
     /**
@@ -83,7 +63,10 @@ class UserInvoiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        //dd($id);
+        $taggmachine= TaggedUsersMachines::findOrFail($id);
+
+        return view('admin.userSession.editSessionRate.edit', ["taggedMachines"=>$taggmachine,"machines"=>Machines::all(), "users"=>User::all()]);
     }
 
     /**

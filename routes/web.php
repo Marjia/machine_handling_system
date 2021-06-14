@@ -18,6 +18,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ShowSessionController;
 use App\Http\Controllers\UserInvoiceController;
 use App\Http\Controllers\ShowTaggedMachine;
+use App\Http\Controllers\EditSessionRate;
 
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,10 @@ Route::get('/pdf/{id}', [InvoicePDFController::class, 'createPDF'])->name('creat
 //admin session routes
 
 Route::resource('user-session',UserSessionController::class)->only(['index','edit','update','store']);
+
+//Admin Edit session rate route
+
+Route::resource('edit-rate',EditSessionRate::class)->only(['index','edit','update']);
 
 //show profile route
 Route::get('/profile',[ProfileController::class,'profileController'])->name('profile');

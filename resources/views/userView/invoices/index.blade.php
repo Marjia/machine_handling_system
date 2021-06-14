@@ -29,12 +29,10 @@
              </td>
              <?php
                    $start = \Carbon\Carbon::parse( $invoice->start_time );
-
                    $start_time = $start->format('M d,Y ,h:i A');
                   //dd($start_time);
                    $end = \Carbon\Carbon::parse( $invoice->end_time );
                    $end_time = $end->format('M d,Y ,h:i A');
-
               ?>
            <td>
              {{ $start_time }}
@@ -51,100 +49,78 @@
 
    </tbody>
  </table>
+
  <table>
- <tbody>
-         <tr>
-           <td>
-             <form method="POST"  action="{{ route('date-invoice.store') }}" >
-               @csrf
-               <!-- @method('PUT') -->
-            <?php
-             $len = count($invoices);
-             if ($len>2):
-            ?>
-
-
-               <div class="row">
-                 <div class="input-field col s6">
-                        <label>From Date Time</label>
-                       <input type="text" class="datepicker" name="start_date" value="<?php echo date("M d,Y", strtotime($invoices[0]->start_time));?>" required>
-                       <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A", strtotime($invoices[0]->start_time));?>" required>
-                 </div>
-               </div>
-             </td>
-             <td>
-             <div class="row">
-                 <div class="input-field col s6">
-                         <label>To Date Time</label>
-                         <input type="text" class="datepicker" name="end_date" value="<?php echo date("M d,Y", strtotime($invoices[1]->start_time));?>" required>
-                         <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A", strtotime($invoices[1]->start_time));?>" required>
-
-                         <?php if (Session::has('error')): ?>
-                           <div class="alert alert-danger">
-                               {{Session::get('error')}}
-                           </div>
-                         <?php endif; ?>
-                 </div>
-               </div>
-             </td>
-             <td>
-               <div>
-                 <label>Discount Rate</label>
-                 <input type="number" name="discount" value="discount">
-               </div>
-
-             </td>
-             <td>
-                  <button type="submit" class="btn">Create</button>
-             </td>
-
-           <?php else: ?>
-             <td>
-             <div class="input-field col s6">
-                    <label>From Date Time</label>
-                   <input type="text" class="datepicker" name="start_date" value="<?php echo date("Y-m-d")?>" required>
-                   <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A")?>" required>
-             </div>
+   <tbody>
+     <tr>
+       <!-- Using DatePickerInvoice controllers store method -->
+       <form class="col s24" action="{{ route('date-invoice.store') }}" method="POST">
+         @csrf
+          <?php
+           $len = count($invoices);
+           if ($len>=2):
+          ?>
+            <td>
+              <div class="row">
+                <div class="input-field col s6">
+                  <label>From Date Time</label>
+                  <input type="text" class="datepicker" name="start_date" value="<?php echo date("M d,Y", strtotime($invoices[0]->start_time));?>" required>
+                  <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A", strtotime($invoices[0]->start_time));?>" required>
+                </div>
+              </div>
             </td>
             <td>
-             <div class="input-field col s6">
-                     <label>To Date Time</label>
-                     <input type="text" class="datepicker" name="end_date" value="<?php echo date("Y-m-d");?>" required>
-                     <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A");?>" required>
-
-                     <?php if (Session::has('error')): ?>
-                       <div class="alert alert-danger">
-                           {{Session::get('error')}}
-                       </div>
-                     <?php endif; ?>
-             </div>
-           <?php endif; ?>
-           </td>
-          </form>
-         </tr>
-         <tr>
-           <td></td>
-           <td></td>
-           <td></td>
-           <td>
-             <div class="row">
-                 <div class="col s12">
-                   <a class="btn" href="{{ route('user-invoice.show',1) }}">Generate Invoice</a>
-                 </div>
-             </div>
-           </td>
-         </tr>
-
-       </tbody>
-     </table>
-   </div>
- </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <label>To Date Time</label>
+                  <input type="text" class="datepicker" name="end_date" value="<?php echo date("M d,Y", strtotime($invoices[1]->end_time));?>" required>
+                  <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A", strtotime($invoices[1]->end_time));?>" required>
+                  <?php if (Session::has('error')): ?>
+                    <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 5px;
+                                                                                      margin-bottom: 5px;
+                                                                                      font-size: 15px;">
+                      {{Session::get('error')}}
+                    </div>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="row">
+                <div class="input-field col s6">
+                  <label>Discount</label>
+                  <input type="number" name="discount" value="discount">
+                </div>
+              </div>
+              <?php if (Session::has('discount_error')): ?>
+                <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 5px;
+                                                                                  margin-bottom: 5px;
+                                                                                  font-size: 14px;">
+                  {{Session::get('discount_error')}}
+                </div>
+              <?php endif; ?>
+            </td>
+            <td>
+              <button type="submit" class="btn">Create Invoice</button>
+            </td>
+            <td></td>
+          <?php else: ?>
+            <!-- <td>start_date</td>
+            <td>end_date</td>
+            <td>discount input</td>
+            <td>button</td> -->
+          <?php endif; ?>
+       </form>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
  @endauth
 
 @endsection
 @section('customJs')
       <script type="text/javascript">
-
       document.addEventListener('DOMContentLoaded', function() {
           var elems = document.querySelectorAll('.datepicker');
           // console.log(elems);
@@ -152,7 +128,6 @@
           var elems = document.querySelectorAll('.timepicker');
           var instances = M.Timepicker.init(elems);
           });
-
       </script>
 
 @endsection

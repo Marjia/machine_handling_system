@@ -64,9 +64,19 @@ class DatePickerInvoice extends Controller
         // Hello
         // ddd($startDateTime, $endDateTime);
 
+      //  dd($request->discount,$startDateTime,$endDateTime);
+
+      if($request->discount>=50){
+        return back()->with('discount_error','Discount can not be more then 49%');
+      }elseif ($request->discount == NULL ) {
+        $discount= 1;
+      }else {
+          $discount = $request->discount;
+      }
+      //dd($discount);
+
       if($startDateTime<$endDateTime)
       {
-
         $userSessions = UserSessions::where("start_time",">=", $startDateTime)
                                 ->where("start_time","<=", $endDateTime)
                                 ->where('is_invoiced','NO')
@@ -74,10 +84,8 @@ class DatePickerInvoice extends Controller
                                 ->get()
                                 ->groupBy('tagged_users_machines_id');
 
-      //dd($userSessions->user_id);
-
       $invoi=rand(10,100);
-    foreach ($userSessions as $res=>$resu) {
+     foreach ($userSessions as $res=>$resu) {
 
       // $userSession = $resu->first();
        $increametnInvoice= rand(0,9);
@@ -97,7 +105,7 @@ class DatePickerInvoice extends Controller
           //$invoi= $invoi + 0;
             //dd($userSession);
 
-          $percent = ($request->input('discount') * $userSession-> session_rate) / 100;
+          $percent = ($discount * $userSession-> session_rate) / 100;
           $total = $userSession->session_rate - $percent;
           //dd($total);
           $invoice = new Invoices();
@@ -107,7 +115,7 @@ class DatePickerInvoice extends Controller
           //echo "userId\n\n\n".$v->id."\n\n\ninvoice number\n\n\n".$invoiceNumberFull;
           $invoice->from_date  = $userSession->start_time;
           $invoice->to_date   = $userSession->end_time;
-          $invoice->discount = 10;
+          $invoice->discount = $discount;
           $invoice->amount   = $userSession->session_rate;
           $invoice->currency   = $userSession->currency;
           $invoice->final_amount   = $total;
@@ -119,15 +127,14 @@ class DatePickerInvoice extends Controller
 
           $userSession->is_invoiced ="YES";
           $userSession->save();
-
-
          }
        }
 
-       return redirect('/user-invoice');
+       return redirect()->route('user-invoice.show',1);
      }
 
       else {
+        //echo "date time is not correct";
         return back()->with('error','please enter valid date');
       }
 

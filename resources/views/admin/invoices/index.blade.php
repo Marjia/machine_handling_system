@@ -10,116 +10,98 @@
    <div class="row">
      <table>
        <thead>
-         <tr>
-             <th>User Name</th>
-             <th>session Id</th>
-             <th>Machine No.</th>
-             <th>Start Time</th>
-             <th>End Time</th>
-             <th>Payment Status</th>
-             <th>Actions</th>
-             <th></th>
-         </tr>
+         <th>User Name</th>
+         <th>Session Id</th>
+         <th>Machine No.</th>
+         <th>Start Time</th>
+         <th>End Time</th>
+         <th>Payment Status</th>
+         <th>Actions</th>
+         <th></th>
        </thead>
        <tbody>
-
-
-
-           <!-- <div class="col s12">
-           <?php //if (Session::has('error')): ?>
-             <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 20px;
-               margin-bottom: 15px;
-               font-size: 22px;">
-
-                 {{Session::get('error')}}
-
-             </div>
-           <?php //endif; ?>
-           </div> -->
-           <tr>
-            @forelse ($invoices as $invoice)
-             <td>
-                 {{$invoice->name}}
-             </td>
-             <td>{{$invoice->id}}</td>
-             <td>
-                 {{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}
-             </td>
-             <td>{{ $invoice->start_time }}</td>
-             <td>{{ $invoice->end_time }}</td>
-             <td>{{ $invoice->is_invoiced }}</td>
-             <td>
-               <a class="btn" href="{{ route('invoice.edit', [$invoice->id]) }}">Create Invoice</a>
-             </td>
+         @forelse ($invoices as $invoice)
+         <?php
+               $start = \Carbon\Carbon::parse( $invoice->start_time );
+               $start_time = $start->format('M d,Y ,h:i A');
+              //dd($start_time);
+               $end = \Carbon\Carbon::parse( $invoice->end_time );
+               $end_time = $end->format('M d,Y ,h:i A');
+          ?>
+         <tr>
+           <td>{{$invoice->name}}</td>
+           <td>{{$invoice->id}}</td>
+           <td>{{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}</td>
+           <td>{{ $start_time }}</td>
+           <td>{{ $end_time }}</td>
+           <td>{{ $invoice->is_invoiced }}</td>
+           <td><a class="btn" href="{{ route('invoice.edit', [$invoice->id]) }}">Create Invoice</a></td>
          </tr>
          @empty
-         <tr><td>No session available!!</td></tr>
+         <tr>
+           <td>No session available!!</td>
+         </tr>
          @endforelse
-     <!-- </form> -->
-         <tr>
-           <td>
-             <form method="POST"  action="{{ route('invoice.store') }}" class="col s12" >
-               @csrf
-               <!-- @method('PUT') -->
-            <?php
-             $len = count($invoices);
-             if ($len>2):
-            ?>
-
-
-               <div class="row">
-                 <div class="input-field col s6">
-                        <label>From Date Time</label>
-                       <input type="text" class="datepicker" name="start_date" value="<?php echo date("Y-m-d", strtotime($invoices[0]->start_time));?>" required>
-                       <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A", strtotime($invoices[0]->start_time));?>" required>
-                 </div>
-                 <div class="input-field col s6">
-                         <label>To Date Time</label>
-                         <input type="text" class="datepicker" name="end_date" value="<?php echo date("Y-m-d", strtotime($invoices[1]->start_time));?>" required>
-                         <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A", strtotime($invoices[1]->start_time));?>" required>
-
-                         <?php if (Session::has('error')): ?>
-                           <div class="alert alert-danger">
-                               {{Session::get('error')}}
-                           </div>
-                         <?php endif; ?>
-                 </div>
-                   <div class="col s6">
-                     <button type="submit" class="btn">Create Invoice</button>
-                   </div>
-               </div>
-             </form>
-           <?php else: ?>
-             <div class="input-field col s6">
-                    <label>From Date Time</label>
-                   <input type="text" class="datepicker" name="start_date" value="<?php echo date("Y-m-d")?>" required>
-                   <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A")?>" required>
-             </div>
-             <div class="input-field col s6">
-                     <label>To Date Time</label>
-                     <input type="text" class="datepicker" name="end_date" value="<?php echo date("Y-m-d");?>" required>
-                     <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A");?>" required>
-
-                     <?php if (Session::has('error')): ?>
-                       <div class="alert alert-danger">
-                           {{Session::get('error')}}
-                       </div>
-                     <?php endif; ?>
-             </div>
-           <?php endif; ?>
-           </td>
-         </tr>
-         <tr>
-           <td>
-             <div class="row">
-                 <div class="col s12">
-                   <a class="btn" href="{{ route('invoice.show',1) }}">Generate Invoice</a>
-                 </div>
-             </div>
-           </td>
-         </tr>
        </tbody>
      </table>
+    <table>
+      <tbody>
+        <form class="col s24" action="{{ route('invoice.store')}}" method="POST">
+         @csrf
+         <?php
+          $len = count($invoices);
+          if ($len>=2):
+          ?>
+           <tr>
+             <td>
+               <div class="row">
+                 <div class="input-field col s6">
+                   <label>From Date Time</label>
+                   <input type="text" class="datepicker" name="start_date" value="<?php echo date("Y-m-d", strtotime($invoices[0]->start_time));?>" required>
+                   <input type="text" class="timepicker" name="start_time" value="<?php echo date("h:i A", strtotime($invoices[0]->start_time));?>" required>
+                 </div>
+               </div>
+             </td>
+             <td>
+               <div class="row">
+                 <div class="input-field col s6">
+                   <label>To Date Time</label>
+                   <input type="text" class="datepicker" name="end_date" value="<?php echo date("Y-m-d", strtotime($invoices[1]->end_time));?>" required>
+                   <input type="text" class="timepicker" name="end_time" value="<?php echo date("h:i A", strtotime($invoices[1]->end_time));?>" required>
+                 </div>
+               </div>
+               <?php if (Session::has('error')): ?>
+                 <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 5px;
+                                                                                   margin-bottom: 5px;
+                                                                                   font-size: 15px;">
+                   {{Session::get('error')}}
+                 </div>
+               <?php endif; ?>
+             </td>
+             <td>
+               <div class="row">
+                 <div class="col s6">
+                   <label>Discount</label>
+                   <input type="number" name="discount" value="discount">
+                 </div>
+               </div>
+               <?php if (Session::has('discount_error')): ?>
+                 <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 5px;
+                                                                                   margin-bottom: 5px;
+                                                                                   font-size: 14px;">
+                   {{Session::get('discount_error')}}
+                 </div>
+               <?php endif; ?>
+             </td>
+             <td>
+               <button type="submit" class="btn">Create Invoice</button>
+             </td>
+             <td></td>
+           </tr>
+         <?php endif; ?>
+        </form>
+      </tbody>
+    </table>
    </div>
  </div>
  @endauth

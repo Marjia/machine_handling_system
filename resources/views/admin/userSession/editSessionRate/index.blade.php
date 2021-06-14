@@ -45,8 +45,7 @@
 
                 @endforeach
                 <td>{{ $tag->is_active }}</td>
-                <td><a class="btn" href="{{ route('delete-detag', $tag->id) }}">Detag</a></td>
-                <td><a class="btn" href="#">Edit Session Rate</a></td>
+                <td><a class="btn" href="{{route('edit-rate.edit',[$tag->id])}}">Edit Session Rate</a></td>
               </tr>
               @empty
                 <tr><td>No machine tagged!!</td></tr>

@@ -17,7 +17,8 @@
 
               <tr>
                 <th>Invoice ID</th>
-                <th>Total Number of Sessions</th>
+                <th style="text-align:center;">Total Number of Sessions</th>
+                <th>Creation Date</th>
                 <th>Total Amount</th>
                 <th>Due Date</th>
                 <th>Action</th>
@@ -44,6 +45,8 @@
                              $id = $invoice->id;
                              $currency = $invoice->currency;
                              $createdDate = $invoice->created_at;
+                             $created_at = \Carbon\Carbon::parse( $invoice->created_at );
+                             $created_atFormate = $created_at->format('D, jS F Y');
                              //dd($createdDate->format('D, jS F Y'));
                              $addedDate =  $createdDate->addDay(5);//->format('D, jS F Y');
                              //dd(strtotime($addedDate)->addDay(2));
@@ -80,7 +83,8 @@
                               {{$invoiceNumber}}
                           </td>
 
-                          <td>{{$len}}</td>
+                          <td style="text-align:center;">{{$len}}</td>
+                          <td>{{ $created_atFormate }}</td>
                           <td>
                               {{$totalAmount}} {{$currency}}
                           </td>
