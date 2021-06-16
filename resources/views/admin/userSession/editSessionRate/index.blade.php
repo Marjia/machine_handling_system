@@ -50,7 +50,7 @@
 
               @endforeach
               <td>{{ $tag->is_active }}</td>
-              <td>{{$tag->is_activehourly_session_charge}} {{$tag->currency}}</td>
+              <td>{{$tag->hourly_session_charge}} {{$tag->currency}}</td>
               <td><a class="btn" href="{{route('edit-rate.edit',[$tag->id])}}">Edit Session Rate</a></td>
             </tr>
             @empty
