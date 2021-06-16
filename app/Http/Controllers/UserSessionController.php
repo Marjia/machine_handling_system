@@ -19,8 +19,10 @@ class UserSessionController extends Controller
     public function index()
     {
       $taggmachine= TaggedUsersMachines::where('is_active','YES')->get();
+      $machines= Machines::where('is_delete', 'NO')->where('is_active','YES')->get();
+      $user = User::where('is_deleted', 'NO')->where('is_active','YES')->get();
 
-      return view('admin.userSession.index', ["taggedMachines"=>$taggmachine,"machines"=>Machines::all(), "users"=>User::all()]);
+      return view('admin.userSession.index', ["taggedMachines"=>$taggmachine,"machines"=>$machines, "users"=>$user]);
       //  return view('admin.userSession.index',['users'=>User::all()]);
     }
 
@@ -45,11 +47,12 @@ class UserSessionController extends Controller
 
        $user = $request->user;
      //dd($user);
+         
           $input = TaggedUsersMachines::where('user_id',$user)
                                         ->where('machine_id',$request->machine_no)
                                          ->where('is_active',"YES")
                                          ->first();
-
+          //dd($input);
          if($input == NULL)
          {
            echo "machine is not tagged with";

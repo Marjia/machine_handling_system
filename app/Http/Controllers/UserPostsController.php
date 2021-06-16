@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserPost;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class UserPostsController extends Controller
@@ -18,7 +19,6 @@ class UserPostsController extends Controller
     public function index()
     {
         $users = User::where('is_deleted', 'NO')
-                      ->where('is_active','YES')
                       ->where('id', "!=", Auth::user()->id)->get();
         // dd($activeUser);
         return view('admin.user.index', ['users'=> $users]);
@@ -62,6 +62,7 @@ class UserPostsController extends Controller
           $addUser->is_admin="YES";
         }
         $addUser->is_active="YES";
+        $addUser->created_by = Auth::user()->id;
         $addUser->password= Hash::make($request['password']);
 
 
@@ -80,7 +81,34 @@ class UserPostsController extends Controller
      */
     public function show($id)
     {
-        return view('admin.user.show',['users'=> User::findOrFail($id)]);
+        $user = User::findOrFail($id);
+
+        if ($user->created_by == NULL) {
+          $created_byname= NULL;
+
+        }
+        elseif ($user->created_by != NULL) {
+          $created_by = User::findOrFail($user->created_by);
+          $created_byname= $created_by->name;
+
+        }
+
+
+        if ($user->modified_by == NULL) {
+          $modified_byname = NULL;
+          $modified_at = NULL;
+        }
+        elseif ($user->modified_by != NULL) {
+          $modified_by = User::where('id',$user->modified_by)->get();
+          $modified_byname =$modified_by->name;
+          $modified_atSTR = $user->updated_at;
+          $modified_at =  Carbon::parse($modified_atSTR)->format('M d,Y ,h:i A');
+        }
+      //   dd($user->modified_by);
+
+        //dd($modified_by);
+        //dd($user->id,$created_by->id,$modified_by->id);
+        return view('admin.user.show',['users'=> $user,'created_by'=>$created_byname,'modified_by'=>$modified_byname,'modified_at'=>$modified_at]);
     }
 
     /**
@@ -142,7 +170,8 @@ class UserPostsController extends Controller
         $userPost->web_site=$request->input('web_site');
         $userPost->tax_reg_no=$request->input('tax_reg_no');
         $userPost->is_admin=$request->input('is_admin');
-
+        $userPost->modified_by=Auth::user()->id;
+        $userPost->updated_at = Carbon::now();
 //updating role of user
         if ($userPost->is_admin == "YES") {
 

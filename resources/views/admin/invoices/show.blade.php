@@ -7,14 +7,10 @@
    @include('auth.login')
   @endguest
   @auth
-
-    <div class="row">
+    <div class="center" style="padding: 20px"> <h1 class="primary-title">Invoice List</h1></div>
+    <div class="row card" style="padding: 20px">
         <table>
             <thead>
-              <!-- <tr>
-                <div class="center" style="padding: 8px"><h1 class="primary-title"></h1></div>
-              </tr> -->
-
               <tr>
                 <th>Invoice ID</th>
                 <th style="text-align:center;">Total Number of Sessions</th>
@@ -26,14 +22,7 @@
             </thead>
             <tbody>
 
-          <?php //dd($invoices); ?>
-
-
-
                       @forelse ($invoices as $i)
-
-                      <?php  ?>
-
                       <tr>
                           <?php
                             $len = count($i);

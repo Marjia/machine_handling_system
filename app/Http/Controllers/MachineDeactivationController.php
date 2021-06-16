@@ -14,8 +14,8 @@ class MachineDeactivationController extends Controller
         $machinePost = Machines::findOrFail($id);
 
         //$request->validated();
-         
-        $machinePost->is_delete = "NO";
+
+        $machinePost->is_delete = "YES";
         $machinePost->save();
 
         return redirect('/machine');

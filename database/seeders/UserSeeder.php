@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserSeeder extends Seeder
 {
@@ -27,6 +28,8 @@ class UserSeeder extends Seeder
             'tax_reg_no'=>'987',
             'phone_number'=>'098',
             'password' => Hash::make('1234'),
+            'created_by'=>2;
+
         ]);
 
         //;
@@ -43,6 +46,7 @@ class UserSeeder extends Seeder
             'tax_reg_no'=>'987',
             'phone_number'=>'098',
             'password' => Hash::make('1234'),
+            'created_by'=>2;
         ]);
 
         USER::create([
@@ -57,6 +61,7 @@ class UserSeeder extends Seeder
             'tax_reg_no'=>'987',
             'phone_number'=>'098',
             'password' => Hash::make('1234'),
+            'created_by'=>2;
         ]);
 
         USER::create([
@@ -71,6 +76,7 @@ class UserSeeder extends Seeder
             'tax_reg_no'=>'987',
             'phone_number'=>'098',
             'password' => Hash::make('1234'),
+            'created_by'=>2;
         ]);
 
         USER::create([
@@ -85,6 +91,7 @@ class UserSeeder extends Seeder
             'tax_reg_no'=>'987',
             'phone_number'=>'098',
             'password' => Hash::make('1234'),
+            'created_by'=>2;
         ]);
     }
 }

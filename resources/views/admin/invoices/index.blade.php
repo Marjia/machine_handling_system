@@ -7,7 +7,8 @@
 
 @auth
  <div class="container">
-   <div class="row">
+   <div class="center" style="padding: 20px"> <h1 class="primary-title">Create Invoice</h1></div>
+   <div class="row card" style="padding: 10px">
      <table>
        <thead>
          <th>User Name</th>
@@ -27,9 +28,11 @@
               //dd($start_time);
                $end = \Carbon\Carbon::parse( $invoice->end_time );
                $end_time = $end->format('M d,Y ,h:i A');
+
+               $name = ucwords($invoice->name);
           ?>
          <tr>
-           <td>{{$invoice->name}}</td>
+           <td>{{$name}}</td>
            <td>{{$invoice->id}}</td>
            <td>{{$machines->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}</td>
            <td>{{ $start_time }}</td>
@@ -71,9 +74,11 @@
                  </div>
                </div>
                <?php if (Session::has('error')): ?>
-                 <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 5px;
-                                                                                   margin-bottom: 5px;
-                                                                                   font-size: 15px;">
+                 <div class="alert alert-danger white-text"
+                      style="padding: 5px;
+                            margin-bottom: 5px;
+                            font-size: 15px;
+                            background:#DC2626;">
                    {{Session::get('error')}}
                  </div>
                <?php endif; ?>
@@ -86,9 +91,11 @@
                  </div>
                </div>
                <?php if (Session::has('discount_error')): ?>
-                 <div class="alert alert-danger deep-orange darken-4 white-text" style="padding: 5px;
-                                                                                   margin-bottom: 5px;
-                                                                                   font-size: 14px;">
+                 <div class="alert alert-danger deep-orange darken-4 white-text"
+                      style="padding: 5px;
+                      margin-bottom: 5px;
+                      font-size: 14px;
+                      background:#DC2626;">
                    {{Session::get('discount_error')}}
                  </div>
                <?php endif; ?>

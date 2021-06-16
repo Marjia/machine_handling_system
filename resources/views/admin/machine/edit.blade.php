@@ -1,10 +1,16 @@
 @extends('template.layout')
 
 @section('content')
-
- <div class="container">
-     <div class="row">
-         <form method="POST"  action="{{ route('machine.update', $machine->id )}}" class="col s12">
+<div class="container">
+  @guest
+   @include('auth.login')
+  @endguest
+</div>
+<div class="container">
+ @auth
+  <div class="center" style="padding: 20px"> <h1 class="primary-title">Edit Machine Details</h1></div>
+   <div class="row" style="padding:15px">
+         <form method="POST"  action="{{ route('machine.update', $machine->id )}}" class="card col s8 offset-s2" style="padding:40px">
             @csrf
             @method('PUT')
 
@@ -49,7 +55,8 @@
             </div>
         </form>
      </div>
- </div>
+@endauth
+</div>
 @endsection
 @section('customJs')
     <script>

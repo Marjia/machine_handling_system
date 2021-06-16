@@ -1,10 +1,13 @@
 
 @extends('template.layout')
 @section('content')
-
+@guest
+@include('auth.login')
+@endguest
+@auth
 <div class="container">
-    <div class="row">
-
+  <div class="center" style="padding: 20px"> <h1 class="primary-title">Create Session</h1></div>
+  <div class="row card" style="padding: 10px">
       <form method="POST"  action="{{ route('user-session.store' )}}" class="col s12">
          @csrf
       <div class="row" style="padding-top: 30px">
@@ -102,6 +105,7 @@
 
     </div>
 </div>
+@endauth
 @endsection
 @section('customJs')
     <script>

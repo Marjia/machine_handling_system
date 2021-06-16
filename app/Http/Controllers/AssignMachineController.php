@@ -14,8 +14,9 @@ class AssignMachineController extends Controller
     public function create(){
 
         // $users= User::where('is_tagged','NO')->get();
-        $machines= Machines::where('is_tagged','NO')->get();
-        return view('admin.machine.assignMachine',["machines"=>$machines,"users"=>User::all()]);
+        $machines= Machines::where('is_tagged','NO')->where('is_delete', 'NO')->where('is_active','YES')->get();
+        $user = User::where('is_deleted', 'NO')->where('is_active','YES')->get();
+        return view('admin.machine.assignMachine',["machines"=>$machines,"users"=>$user]);
     }
 
     public function store(Request $request){

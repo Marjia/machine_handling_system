@@ -1,8 +1,12 @@
 @extends('template.layout')
 @section('content')
-
+@guest
+@include('auth.login')
+@endguest
+@auth
  <div class="container">
-     <div class="row">
+     <div class="center" style="padding: 20px"> <h1 class="primary-title">Add Machine</h1></div>
+     <div class="row card" style="padding:15px">
          <form method="POST"  action="{{ route('machine.store') }}" class="col s12">
             @csrf
 
@@ -36,6 +40,7 @@
         </form>
      </div>
  </div>
+@endauth
 @endsection
 @section('customJs')
     <script>

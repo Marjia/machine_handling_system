@@ -1,7 +1,12 @@
 @extends('template.layout')
 @section('content')
+@guest
+@include('auth.login')
+@endguest
+@auth
 <div class="container">
-    <div class="row">
+   <div class="center" style="padding: 20px"> <h1 class="primary-title">Add User</h1></div>
+    <div class="row card" style="padding:8px">
         <form class="col s12" method="POST" action="{{route('user.store')}}">
             @csrf
             <div class="row">
@@ -150,9 +155,8 @@
         </form>
     </div>
 </div>
-
+@endauth
 @endsection
-
 @section('customJs')
     <script>
         document.addEventListener('DOMContentLoaded', function() {

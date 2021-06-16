@@ -175,7 +175,7 @@ class InvoicePDFController extends Controller {
         $this->pdf->SetY(51);
         $this->pdf->SetX(14);
         $this->pdf->SetFont('Arial','',11);
-        $this->pdf->Cell(80,8,$user->name,0,0,'L');
+        $this->pdf->Cell(80,8,ucwords($user->name),0,0,'L');
 
         $this->pdf->Ln(0);
         $this->pdf->SetY(56);

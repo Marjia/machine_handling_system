@@ -1,8 +1,14 @@
 @extends('template.layout')
 @section('content')
-
+<div class="container">
+@guest
+@include('auth.login')
+@endguest
+</div>
  <div class="container">
-     <div class="row">
+@auth
+   <div class="center" style="padding: 20px"> <h1 class="primary-title">Tag Machine User</h1></div>
+   <div class="row card" style="padding: 10px">
          <form method="POST"  action="{{ route('assign-machine') }}" class="col s12">
             @csrf
 
@@ -88,6 +94,7 @@
             </div>
         </form>
      </div>
+@endauth
  </div>
 @endsection
 @section('customJs')

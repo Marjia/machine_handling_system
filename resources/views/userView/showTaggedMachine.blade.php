@@ -1,10 +1,13 @@
-
 @extends('template.layout')
 @section('content')
-
+@guest
+@include('auth.login')
+@endguest
+@auth
 <div class="container">
+    <div class="center" style="padding: 20px"> <h2 class="primary-title">Tagged Machines</h2></div>
     <div class="row">
-
+      <div class="card col s6 offset-s3">
         <table>
             <thead>
               <tr>
@@ -37,11 +40,11 @@
                 @endforeach
 
                 <?php
-                  $session_rate = $tag->created_at;
-                  $session_rateF = $session_rate->format('D, jS F Y');
+                  $created_at = $tag->created_at;
+                  $created_atF = $created_at->format('D, jS F Y');
                  ?>
                 <td>{{$tag->hourly_session_charge}}  {{$tag->currency}}</td>
-                <td>{{$session_rateF}}</td>
+                <td>{{$created_atF}}</td>
                 <td>{{ $tag->is_active }}</td>
                 <!-- <td><a class="btn" href="{{ route('delete-detag', $tag->id) }}">Detag</a></td>
                 <td><a class="btn" href="#">Edit Session Rate</a></td> -->
@@ -51,6 +54,8 @@
               @endforelse
             </tbody>
           </table>
+      </div>
     </div>
 </div>
+@endauth
 @endsection

@@ -1,13 +1,38 @@
 @extends('template.layout')
 @section('content')
-    <div class="container">
-     @guest
-      @include('auth.login')
-     @endguest
+<div class="container">
+  @guest
+   @include('auth.login')
+  @endguest
+</div>
       @auth
+      <!-- <div class="card">
+        <div class="card-single">
+          <div>
+            <h1>34</h1>
+            <span>Customers</span>
+          </div>
+          <div>
+            <span class="las la-users"></span>
+          </div>
+        </div>
+        <div class="card-single">
+          <div>
+            <h1>34</h1>
+            <span>Customers</span>
+          </div>
+          <div>
+            <span class="las la-users"></span>
+          </div>
+        </div>
+
+      </div>
+ -->
+
+      <div class="container">
         <div class="row" style="padding-top: 50px">
 
-            <div class="col s12 m6">
+            <!-- <div class="col s12 m6">
               <div class="card horizontal">
                 <div class="card-image">
                   <img src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" >
@@ -157,9 +182,9 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-<!--
+
             <div class="col s4">
                 <div class="card-panel blue darken-4" style="background: linear-gradient(90deg,#0d47a1 ,#2962ff);">
                     <div class="card-action">
@@ -229,7 +254,7 @@
                         <a class="white-text" href="{{route('invoice.show',1)}}">Show Invoices</a>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
       @endauth
     </div>

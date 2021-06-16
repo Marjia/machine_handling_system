@@ -1,7 +1,12 @@
 @extends('template.layout')
 @section('content')
+@guest
+@include('auth.login')
+@endguest
+@auth
 <div class="container">
-    <div class="row">
+  <div class="center" style="padding: 20px"> <h1 class="primary-title">Edit User Details</h1></div>
+      <div class="row card" style="padding:30px">
         <form class="col s12" method="POST" action="{{route('user.update', $userPost->id)}}">
             @csrf
             @method('PUT')
@@ -148,7 +153,7 @@
         </form>
     </div>
 </div>
-
+@endauth
 @endsection
 
 @section('customJs')
