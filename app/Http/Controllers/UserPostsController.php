@@ -17,7 +17,9 @@ class UserPostsController extends Controller
      */
     public function index()
     {
-        $users = User::where('is_deleted', 'NO')->where('id', "!=", Auth::user()->id)->get();
+        $users = User::where('is_deleted', 'NO')
+                      ->where('is_active','YES')
+                      ->where('id', "!=", Auth::user()->id)->get();
         // dd($activeUser);
         return view('admin.user.index', ['users'=> $users]);
     }
@@ -141,7 +143,7 @@ class UserPostsController extends Controller
         $userPost->tax_reg_no=$request->input('tax_reg_no');
         $userPost->is_admin=$request->input('is_admin');
 
-//updating role of user          
+//updating role of user
         if ($userPost->is_admin == "YES") {
 
           if ($userPost->hasRole('admin') == true) {

@@ -10,6 +10,7 @@
 </head>
 <body>
     @include('template.nav')
+    <!-- @include('template.sidenav') -->
     @yield('content')
 
     <script src="{{ asset('js/materialize.min.js') }}"></script>

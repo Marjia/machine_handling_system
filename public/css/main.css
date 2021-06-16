@@ -54,3 +54,43 @@ p {
   font-size: clamp(3rem, calc(5vw+1rem), 4.5rem);
   line-height: 1;
 }
+
+/* sidenav css */
+
+#mainbox{
+  font-size: 35px;
+  cursor: pointer;
+  transition: all .6s;
+}
+
+.sidemenu{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 0px;
+  background-color: #222;
+  z-index: 1;
+  padding-top: 100px;
+  overflow-x: hidden;
+  transition: all .5s;
+}
+.sidemenu a{
+  padding: 10px 10px 10px 40px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #999;
+  display: block;
+}
+
+.sidemenu a:hover{
+  color: white;
+}
+
+.sidemenu .closebtn{
+  position: absolute;
+  top: 0px;
+  right: 25px;
+  font-size: 46 px;
+  margin-left: 32px;
+}

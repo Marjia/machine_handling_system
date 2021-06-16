@@ -32,13 +32,13 @@
                   <th>Tagged: </th>
                   <td>{{$machine->is_tagged }}</td>
                 </tr>
-                <!-- <tr>
+                <tr>
                   <th>Tagged By: </th>
-                  <td>{{$machine->find($invoice->taggedUsersMachines()->first()->machine_id)->machine_no}}</td>
-                </tr> -->
+                  <td>{{$tagged_by}}</td>
+                </tr>
                 <tr>
                   <th>Tagged User: </th>
-                 <td>{{$tag->name}}</td>
+                 <td>{{$tagged_with}}</td>
                 </tr>
             </tbody>
           </table>

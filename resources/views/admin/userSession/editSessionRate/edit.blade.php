@@ -2,22 +2,34 @@
 @section('content')
 <div class="container">
   <div class="row">
-    <form class="col s12" action="{{route('edit-rate.update',1)}}" method="POST" style="margin:10%;">
+    <form class="col s12" action="{{route('edit-rate.update',$taggedMachines->id)}}" method="POST" style="margin:10%;">
       @csrf
       @method('PUT')
       <table>
         <tbody>
+          <?php
+          //dd($taggedMachines);
+           ?>
           <tr>
             <th>User name:</th>
-            <td></td>
+            <td>{{$user->name}}</td>
           </tr>
           <tr>
             <th>Machine No:</th>
-            <td></td>
+            <td>{{$machine->machine_no}}</td>
           </tr>
           <tr>
-            <th>Session Rate</th>
-            <td></td>
+            <td>
+              <div class="row input-field">
+                <label for="hourly_session_charge">Session Rate</label>
+                <input type="text" name="hourly_session_charge" value="{{ old('hourly_session_charge', $taggedMachines->hourly_session_charge)}}" >
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="submit" name="button" class="btn">Update</button>
+            </td>
           </tr>
         </tbody>
       </table>

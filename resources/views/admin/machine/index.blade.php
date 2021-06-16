@@ -19,7 +19,7 @@
               @forelse ($machines as $machine)
               <tr>
                 <td>
-                  <a href=" {{ route('machine.show',$machine->id) }} "> 
+                  <a href=" {{ route('machine.show',[$machine->id]) }} "> 
                     {{ $machine->machine_no }}
                   </a>
                 </td>
@@ -33,5 +33,5 @@
             </tbody>
           </table>
     </div>
-</div>    
+</div>
 @endsection

@@ -15,7 +15,7 @@
               </tr>
             </thead>
             <tbody>
-              @forelse ($taggedMachines as $tag)
+              @forelse ($tagMachines as $tag)
               <tr>
                 @foreach ($users as $user)
                   @php

@@ -19,7 +19,7 @@ class EditSessionRate extends Controller
     {
       $taggmachine= TaggedUsersMachines::where('is_active','YES')->get();
 
-      return view('admin.userSession.editSessionRate.index', ["taggedMachines"=>$taggmachine,"machines"=>Machines::all(), "users"=>User::all()]);
+      return view('admin.userSession.editSessionRate.index', ["tagMachines"=>$taggmachine,"machines"=>Machines::all(), "users"=>User::all()]);
         //
     }
 
@@ -65,8 +65,11 @@ class EditSessionRate extends Controller
     {
         //dd($id);
         $taggmachine= TaggedUsersMachines::findOrFail($id);
+        $user = User::findOrFail($taggmachine->user_id);
+        $machine = Machines::findOrFail($taggmachine->machine_id);
+        //dd($taggmachine->user_id,$user,$machine);
 
-        return view('admin.userSession.editSessionRate.edit', ["taggedMachines"=>$taggmachine,"machines"=>Machines::all(), "users"=>User::all()]);
+        return view('admin.userSession.editSessionRate.edit', ["taggedMachines"=>$taggmachine,"machine"=>$machine, "user"=>$user]);
     }
 
     /**
@@ -78,7 +81,13 @@ class EditSessionRate extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //dd($request->hourly_session_charge,$id);
+
+        $tagMachine = TaggedUsersMachines::findOrFail($id);
+        $tagMachine->hourly_session_charge = $request->hourly_session_charge;
+        $tagMachine->save();
+
+       return(redirect('/edit-rate'));
     }
 
     /**

@@ -63,17 +63,30 @@ class MachinePostContoller extends Controller
     {
       //  $tag = TaggedUsersMachines::findOrFail($id);
         //$user_id = $tag->user_id;
-        //dd($tag);
         $machine=Machines::findOrFail($id);
-        $user= User::findOrFail($machine->created_by);
-        $tag = TaggedUsersMachines::where('machine_id',$id)
-                    ->join('users','users.id','=','tagged_users_machines.user_id')
-                    ->select('users.name','tagged_users_machines.tagged_by','tagged_users_machines.tagged_at',)
-                    ->first();
+         //dd($id);
+        if ($machine->is_tagged == "YES") {
+          $tag = TaggedUsersMachines::join('users','users.id','=','tagged_users_machines.user_id')
+                      ->select('users.name','tagged_users_machines.tagged_by',
+                      'tagged_users_machines.tagged_at','tagged_users_machines.machine_id')
+                      ->where('machine_id',$id)
+                      ->first();
+            $userW = User::findOrFail($tag->tagged_by);
+           $tagged_with=$tag->name;
+           $tagged_by = $userW->name;
+        }
+        elseif ($machine->is_tagged == "YES") {
+          $tagged_with=NULL;
+          $tagged_by = NULL;
+        // code...
+        }
+
+         $user= User::findOrFail($machine->created_by);
         //$tag = TaggedUsersMachines::findOrFail($id);
        //sreturn $tag->name;
 
-        return view('admin.machine.show',['machine'=> $machine,'users'=>$user,'tag'=>$tag]);
+        return view('admin.machine.show',['machine'=> $machine,'users'=>$user,
+                'tagged_with'=>$tagged_with,'tagged_by'=>$tagged_by]);
     }
 
     /**
