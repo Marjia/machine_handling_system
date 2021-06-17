@@ -1,4 +1,4 @@
-<nav class="grey darken-3">
+<!-- <nav class="grey darken-3">
     <div class="container">
         <div class="nav-wrapper">
             <a href="{{route('home')}}" class="brand-logo">Home</a>
@@ -23,7 +23,7 @@
                     </li>
                     </li>
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <!-- <li>
+                    <li>
                   	<form action="{{route('logout')}}" method="post">
                   	  @csrf
                   	  <button type="submit" class="btn grey darken-3">Logout</button>
@@ -35,75 +35,96 @@
                       <ul id='dropdown1' class='dropdown-content'>
                         <li><a href="#!">one</a></li>
                       </ul>
-                   </li> -->
+                   </li>
                 @endauth
             </ul>
         </div>
-    </div>
+    </div> -->
 
-<!-- <div class="sidebar">
+<input type="checkbox" id="nav-toggle">
+<div class="sidebar">
   <div class="sidebar-brand">
-    <h5>
+    <h2>
       <span class="lab la-accusoft"></span>
-       Machine Manage
-    </h5>
+      <span>Machine Manage</span>
+    </h2>
   </div>
   <div class="sidebar-menu">
     <ul>
       <li>
-        <a href="#">
+        <a href="" class="active">
           <span class="las la-igloo"></span>
-          <span style="color:black;">Dashboard</span>
+          <span>Dashboard</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">Profile</span>
+          <span class="las la-user"></span>
+          <span>Profile</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">Add User</span>
+          <span class="las la-user-plus"></span>
+          <span>Add User</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">Add Machine</span>
+          <span class="las la-laptop"></span>
+          <span>Add Machine</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">User List</span>
+          <span class="las la-users"></span>
+          <span>User List</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">Machine List</span>
+          <span class="las la-microchip"></span>
+          <span>Machine List</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">Tag Machine User</span>
+          <span class="las la-tags"></span>
+          <span>Tag Machine User</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las la-igloo"></span>
-          <span style="color:black;">Detag Machine</span>
+          <span class="las la-cut"></span>
+          <span>Detag Machine</span>
         </a>
       </li>
       <li>
         <a href="#">
-          <span class="las">
-            <img src="/img/tagg-machine.png" style="height:15px; width:15px;">
+          <span class="las la-chart-line">
           </span>
-          <span style="color:black;">Create Session</span>
+          <span>Create Session</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="las la-edit">
+          </span>
+          <span>Edit Session Rate</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="las la-clipboard">
+          </span>
+          <span>Create Invoice</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="las la-chart-bar">
+          </span>
+          <span>Show Invoice</span>
         </a>
       </li>
 
@@ -112,26 +133,28 @@
 </div>
 <div class="main-content">
   <header>
-    <h1>
-      <label for="">
+    <h5>
+      <label for="nav-toggle">
         <span class="las la-bars"></span>
       </label>
       Dashboard
-    </h1>
+    </h5>
 
-    <div class="search-wraper">
+    <!-- <div class="search-wrapper">
       <span class="las la-search"></span>
       <input type="search" placeholder="search here">
-    </div>
+    </div> -->
     <div class="user-wrapper">
-      <img src="/img/tagg-machine.png" width="40px" height="40px" alt="">
-    </div>
-    <div>
-        <h4>Coco Spencer</h4>
-        <small>Admin</small>
+      <img src="https://www.itechway.net/wp-content/uploads/2017/06/girl-profile-pic-1024x683.jpeg"
+      width="40px" height="40px" alt="">
+      <div>
+          <h4 style="color:black">Coco Spencer</h4>
+          <small>Logout</small>
+      </div>
+
     </div>
   </header>
-</div> -->
+</div>
 
 
 <!-- sidenave code pink one     -->
@@ -152,7 +175,7 @@
       <a href="#" class="closebtn" onclick="closefunction()">x</a>
     </div> -->
 
-</nav>
+<!-- </nav> -->
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
       var elems = document.querySelectorAll('.dropdown-trigger');

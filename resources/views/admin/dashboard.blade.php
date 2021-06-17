@@ -1,36 +1,131 @@
 @extends('template.layout')
 @section('content')
-<div class="container">
   @guest
    @include('auth.login')
   @endguest
-</div>
       @auth
-      <!-- <div class="card">
-        <div class="card-single">
-          <div>
-            <h1>34</h1>
-            <span>Customers</span>
+      <div class="main-content">
+        <main>
+          <div class="cards">
+            <a href="route('user.index')">
+              <div class="card-single" style="background:white;color:black;">
+                <div>
+                  <h2 style="color:black">Add</h2>
+                  <span style="color:#424242">Users</span>
+                </div>
+                <div>
+                  <span class="las la-user-plus" style="color:#424242"></span>
+                </div >
+              </div>
+            </a>
+            <a href="#">
+            <div class="card-single" style="background:white;color:black;">
+              <div>
+                <h2 style="color:black">Add</h2>
+                <span style="color:#424242">Machine</span>
+              </div>
+              <div>
+                <span class="las la-laptop" style="color:#424242"></span>
+              </div>
+            </div>
+            </a>
+            <a href="#">
+            <div class="card-single" style="background:white;color:black;">
+              <div>
+                <h2 style="color:black">User</h2>
+                <span style="color:#424242">List</span>
+              </div>
+              <div>
+                <span class="las la-users" style="color:#424242"></span>
+              </div>
+            </div>
+            </a>
+            <a href="#">
+            <div class="card-single">
+              <div>
+                <h2>Machine</h2>
+                <span>List</span>
+              </div>
+              <div>
+                <span class="las la-microchip"></span>
+              </div>
+            </div>
+            </a>
+            <a href="route('user.index')">
+              <div class="card-single" style="background:white;color:black;">
+                <div>
+                  <h2 style="color:black">Tag</h2>
+                  <span style="color:#424242">Machine Users</span>
+                </div>
+                <div>
+                  <span class="las la-tags" style="color:#424242"></span>
+                </div >
+              </div>
+            </a>
+            <a href="#">
+            <div class="card-single"  style="background:white;color:black;">
+              <div>
+                <h2 style="color:black">Detag</h2>
+                <span style="color:#424242">Machine</span>
+              </div>
+              <div>
+                <span class="las la-cut" style="color:#424242"></span>
+              </div>
+            </div>
+            </a>
+            <a href="#">
+            <div class="card-single"  style="background:white;color:black;">
+              <div>
+                <h2 style="color:black">Create</h2>
+                <span style="color:#424242">Sessions</span>
+              </div>
+              <div>
+                <span class="las la-chart-line" style="color:#424242"></span>
+              </div>
+            </div>
+            </a>
+            <a href="#">
+            <div class="card-single">
+              <div>
+                <h2>Edit</h2>
+                <span>Session Rate</span>
+              </div>
+              <div>
+                <span class="las la-edit"></span>
+              </div>
+            </div>
+            </a>
+            <a href="#">
+            <div class="card-single"  style="background:white;color:black;">
+              <div>
+                <h2 style="color:black">Create</h2>
+                <span style="color:#424242">Invoice</span>
+              </div>
+              <div>
+                <span class="las la-clipboard" style="color:#424242"></span>
+              </div>
+            </div>
+            </a>
+            <a href="#">
+            <div class="card-single"  style="background:white;color:black;">
+              <div>
+                <h2 style="color:black">Show</h2>
+                <span style="color:#424242">Invoice</span>
+              </div>
+              <div>
+                <span class="las la-chart-bar"  style="color:#424242"></span>
+              </div>
+            </div>
+            </a>
+
           </div>
-          <div>
-            <span class="las la-users"></span>
-          </div>
-        </div>
-        <div class="card-single">
-          <div>
-            <h1>34</h1>
-            <span>Customers</span>
-          </div>
-          <div>
-            <span class="las la-users"></span>
-          </div>
-        </div>
+
+        </main>
 
       </div>
- -->
 
-      <div class="container">
-        <div class="row" style="padding-top: 50px">
+      <!-- <div class="container">
+        <div class="row" style="padding-top: 50px"> -->
 
             <!-- <div class="col s12 m6">
               <div class="card horizontal">
@@ -185,7 +280,7 @@
             </div> -->
 
 
-            <div class="col s4">
+            <!-- <div class="col s4">
                 <div class="card-panel blue darken-4" style="background: linear-gradient(90deg,#0d47a1 ,#2962ff);">
                     <div class="card-action">
                         <a class="white-text" href="{{route('user.index')}}">Users List</a>
@@ -256,7 +351,6 @@
                 </div>
             </div>
         </div>
-      @endauth
-    </div>
-
+    </div> -->
+  @endauth
 @endsection
