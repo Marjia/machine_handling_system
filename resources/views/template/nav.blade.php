@@ -52,15 +52,21 @@
   <div class="sidebar-menu">
     <ul>
       <li>
-        <a href="" class="active">
+        <a href="{{ route('dashboard') }}" class="active">
           <span class="las la-igloo"></span>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a href="#">
+        <a href="{{ route('profile') }}">
           <span class="las la-user"></span>
           <span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="{{route('login')}}">
+          <span class="las la-user"></span>
+          <span>Log In</span>
         </a>
       </li>
       <li>
@@ -144,15 +150,24 @@
       <span class="las la-search"></span>
       <input type="search" placeholder="search here">
     </div> -->
+
+
+@auth
     <div class="user-wrapper">
       <img src="https://www.itechway.net/wp-content/uploads/2017/06/girl-profile-pic-1024x683.jpeg"
-      width="40px" height="40px" alt="">
+      width="50px" height="50px" alt="">
       <div>
-          <h4 style="color:black">Coco Spencer</h4>
-          <small>Logout</small>
+          <h4 style="color:black">{{ auth()->user()->name }} {{ auth()->user()->last_name }}</h4>
+          <form id="formOne" action="{{route('logout')}}" method="post">
+            @csrf
+            <button type="submit" class="btn grey darken-3">Logout</button>
+            <!-- <a type="submit" onclick="formOne.submit()" style="color:black; text-align:center;">Logout</a> -->
+          </form>
+          <!-- <small>Logout</small> -->
       </div>
 
     </div>
+@endauth
   </header>
 </div>
 
